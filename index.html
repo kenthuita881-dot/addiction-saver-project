@@ -1,0 +1,2660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recovery Support, Day Tracker and Counselors | Addiction Saver</title>
+  <meta name="description" content="Addiction Saver: learn about addiction, read daily, track your recovery, join meetings and chat privately with a counselor.">
+  <meta name="theme-color" content="#0f1b3d">
+  <script>document.documentElement.classList.add('js');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+/* ==========================================================
+   Addiction Saver: stylesheet
+   Palette: night navy + teal + sunrise amber/coral
+   ========================================================== */
+:root {
+  --navy: #0f1b3d;
+  --navy-2: #1b2b5e;
+  --indigo: #4338ca;
+  --teal: #0ea5a4;
+  --teal-d: #0b7f7e;
+  --sun: #fbbf24;
+  --amber: #f59e0b;
+  --coral: #f97362;
+  --rose: #ec4899;
+  --ink: #14213d;
+  --muted: #5b6785;
+  --line: #e3e8f5;
+  --bg: #f6f8ff;
+  --card: #ffffff;
+  --radius: 20px;
+  --shadow: 0 10px 30px rgba(15, 27, 61, .08);
+  --shadow-lg: 0 24px 60px rgba(15, 27, 61, .18);
+  --grad-sun: linear-gradient(135deg, #fbbf24 0%, #f97362 100%);
+  --grad-night: linear-gradient(135deg, #0f1b3d 0%, #312e81 55%, #0e7490 100%);
+  --grad-teal: linear-gradient(135deg, #0ea5a4 0%, #3b82f6 100%);
+  --font-head: "Playfair Display", Georgia, serif;
+  --font-body: "Poppins", "Segoe UI", Tahoma, Arial, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; padding: 0; }
+html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+body {
+  font-family: var(--font-body); color: var(--ink); background: var(--bg);
+  line-height: 1.65; -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+img, svg { display: block; max-width: 100%; }
+a { color: var(--indigo); }
+ul, ol { list-style: none; }
+button { font-family: inherit; }
+.hidden { display: none !important; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+:focus-visible { outline: 3px solid var(--sun); outline-offset: 2px; }
+
+.wrap { width: min(1180px, 100% - 48px); margin-inline: auto; }
+.wrap.narrow { width: min(820px, 100% - 48px); }
+
+/* ===== scroll progress & crisis bar ===== */
+.scroll-progress { position: fixed; top: 0; left: 0; height: 4px; width: 0; z-index: 3000; background: var(--grad-sun); }
+.crisis-bar { background: #fff7e6; color: #7c4a03; font-size: .84rem; text-align: center; padding: 8px 16px; border-bottom: 1px solid #fde8b0; }
+
+/* ===== navbar ===== */
+.navbar {
+  position: sticky; top: 0; z-index: 1000; display: flex; align-items: center; justify-content: space-between;
+  padding: 12px max(24px, calc((100% - 1180px) / 2)); background: rgba(15, 27, 61, .92);
+  backdrop-filter: blur(14px); border-bottom: 1px solid rgba(255, 255, 255, .08); transition: box-shadow .3s;
+}
+.navbar.scrolled { box-shadow: 0 8px 30px rgba(0, 0, 0, .25); }
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: #fff; font-weight: 600; font-size: 1.2rem; }
+.logo b { color: var(--sun); }
+.logo-mark { width: 38px; height: 38px; }
+nav { display: flex; align-items: center; gap: 2px; }
+nav a {
+  color: #d6dcf5; text-decoration: none; font-size: .88rem; font-weight: 500; padding: 8px 12px;
+  border-radius: 30px; transition: .2s; white-space: nowrap;
+}
+nav a:hover { color: #fff; background: rgba(255, 255, 255, .1); }
+nav a.active { color: var(--navy); background: var(--sun); }
+nav a.nav-phone { margin-left: 8px; background: var(--grad-sun); color: var(--navy); font-weight: 600; }
+.menu-toggle { display: none; background: none; border: 0; color: #fff; font-size: 1.7rem; cursor: pointer; }
+
+/* ===== buttons ===== */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 0; cursor: pointer;
+  padding: 13px 28px; border-radius: 50px; font-size: .98rem; font-weight: 600; text-decoration: none;
+  transition: transform .2s, box-shadow .2s, filter .2s;
+}
+.btn:hover { transform: translateY(-3px); }
+.btn:active { transform: translateY(0); }
+.btn-sun { background: var(--grad-sun); color: var(--navy); box-shadow: 0 8px 22px rgba(249, 115, 98, .35); }
+.btn-teal { background: var(--grad-teal); color: #fff; box-shadow: 0 8px 22px rgba(14, 165, 164, .35); }
+.btn-outline { background: rgba(255, 255, 255, .08); color: #fff; border: 2px solid rgba(255, 255, 255, .45); }
+.btn-white { background: #fff; color: var(--indigo); }
+.btn-ghost-dark { background: transparent; color: var(--muted); border: 2px solid var(--line); }
+.btn-ghost-dark:hover { border-color: var(--coral); color: var(--coral); }
+.btn.small { padding: 9px 20px; font-size: .88rem; }
+.btn.wide { width: 100%; }
+.btn[disabled] { opacity: .6; cursor: not-allowed; transform: none; }
+
+/* ===== hero ===== */
+.hero { position: relative; overflow: hidden; color: #fff; background: var(--grad-night); padding: 90px 0 120px; }
+.hero-bg .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: .5; animation: drift 12s ease-in-out infinite; }
+.orb.o1 { width: 380px; height: 380px; background: var(--teal); top: -120px; left: -100px; }
+.orb.o2 { width: 340px; height: 340px; background: var(--coral); bottom: -140px; right: 10%; animation-delay: -4s; }
+.orb.o3 { width: 260px; height: 260px; background: var(--indigo); top: 20%; right: -80px; animation-delay: -8s; }
+@keyframes drift { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(30px, -34px); } }
+
+.hero-inner { position: relative; z-index: 2; width: min(1180px, 100% - 48px); margin-inline: auto; display: grid; grid-template-columns: 1.15fr .85fr; gap: 56px; align-items: center; }
+.pill { display: inline-block; padding: 7px 18px; border-radius: 40px; font-size: .84rem; font-weight: 500; background: rgba(255, 255, 255, .12); border: 1px solid rgba(255, 255, 255, .25); }
+.hero h1 { font-family: var(--font-head); font-size: clamp(3rem, 7vw, 5.2rem); line-height: 1.05; font-weight: 800; margin: 20px 0 16px; letter-spacing: -.5px; }
+.hero h1 em { font-style: normal; background: var(--grad-sun); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.lead { font-size: 1.15rem; color: #dfe5ff; max-width: 540px; }
+.hero-cta { display: flex; gap: 14px; flex-wrap: wrap; margin: 30px 0 28px; }
+.trust-row { display: flex; gap: 22px; flex-wrap: wrap; font-size: .9rem; color: #cfd8ff; }
+
+.hero-card {
+  background: rgba(255, 255, 255, .1); border: 1px solid rgba(255, 255, 255, .22); border-radius: 28px;
+  padding: 30px; text-align: center; backdrop-filter: blur(16px); box-shadow: var(--shadow-lg);
+  animation: bob 7s ease-in-out infinite;
+}
+@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+.hc-eyebrow { font-size: .76rem; letter-spacing: 2px; text-transform: uppercase; color: #cbd5ff; }
+.mini-ring { position: relative; width: 176px; height: 176px; margin: 16px auto; }
+.mini-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.m-bg, .m-fg { fill: none; stroke-width: 9; }
+.m-bg { stroke: rgba(255, 255, 255, .18); }
+.m-fg { stroke: var(--sun); stroke-linecap: round; stroke-dasharray: 326.7; stroke-dashoffset: 98; }
+.mini-ring-text { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.mini-ring-text strong { font-family: var(--font-head); font-size: 3rem; line-height: 1; }
+.mini-ring-text span { font-size: .78rem; color: #cbd5ff; }
+.hc-line { display: flex; justify-content: space-between; font-size: .84rem; margin-bottom: 8px; color: #dfe5ff; }
+.hc-note { margin-top: 14px; font-weight: 500; }
+.bar { height: 10px; background: rgba(120, 130, 170, .25); border-radius: 20px; overflow: hidden; }
+.bar i { display: block; height: 100%; width: 0; border-radius: 20px; background: var(--grad-sun); transition: width .8s ease; }
+.bar.big { height: 14px; background: #e6eaf8; margin-top: 18px; }
+.bar.big i { background: linear-gradient(90deg, var(--teal), var(--indigo), var(--rose)); }
+.scroll-hint { position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%); color: #fff; text-decoration: none; font-size: 2rem; opacity: .7; animation: nudge 2s ease-in-out infinite; z-index: 2; }
+@keyframes nudge { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 8px); } }
+
+/* ===== sections ===== */
+.section { padding: 96px 0; }
+.section.tight { padding: 70px 0 20px; }
+.section.alt { background: #fff; }
+.sec-head { text-align: center; max-width: 720px; margin: 0 auto 48px; }
+.sec-head.left { text-align: left; margin: 0; max-width: none; }
+.eyebrow { display: inline-block; font-size: .76rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--coral); margin-bottom: 8px; }
+.sec-head h2 { font-family: var(--font-head); font-size: clamp(2rem, 4.2vw, 3rem); line-height: 1.15; font-weight: 700; color: var(--navy); margin-bottom: 12px; }
+.sec-head p { color: var(--muted); }
+.sec-head .ticks { margin-top: 18px; }
+
+/* ===== reveal animation (only when JS is on) ===== */
+.js .reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s ease, transform .7s ease; }
+.js .reveal.in { opacity: 1; transform: none; }
+
+/* ===== how it works ===== */
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; counter-reset: s; }
+.step { background: #fff; border-radius: var(--radius); padding: 26px 22px; box-shadow: var(--shadow); text-align: center; border-top: 5px solid var(--teal); transition: transform .3s; }
+.step:nth-child(2) { border-color: var(--sun); }
+.step:nth-child(3) { border-color: var(--coral); }
+.step:nth-child(4) { border-color: var(--indigo); }
+.step:hover { transform: translateY(-8px); }
+.step-n { display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--grad-night); color: #fff; font-weight: 700; margin-bottom: 10px; }
+.step h3 { font-size: 1.1rem; margin-bottom: 4px; color: var(--navy); }
+.step p { font-size: .9rem; color: var(--muted); }
+
+/* ===== addictions explorer ===== */
+.explorer-tools { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+.explorer-tools.left { margin-bottom: 20px; }
+.search-box { flex: 1 1 280px; }
+input, select, textarea {
+  width: 100%; padding: 13px 16px; border: 2px solid var(--line); border-radius: 14px; background: #fff;
+  font: inherit; color: var(--ink); transition: border-color .2s, box-shadow .2s;
+}
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--indigo); box-shadow: 0 0 0 4px rgba(67, 56, 202, .15); }
+.chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip { border: 2px solid var(--line); background: #fff; color: var(--muted); padding: 8px 18px; border-radius: 40px; font-weight: 500; font-size: .88rem; cursor: pointer; transition: .2s; }
+.chip:hover { border-color: var(--indigo); color: var(--indigo); }
+.chip.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+
+.add-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 22px; }
+.add-card {
+  position: relative; overflow: hidden; text-align: left; border: 0; cursor: pointer; color: #fff; padding: 24px;
+  border-radius: var(--radius); box-shadow: var(--shadow); transition: transform .3s, box-shadow .3s; min-height: 190px;
+}
+.add-card::after { content: ""; position: absolute; width: 150px; height: 150px; right: -50px; top: -50px; border-radius: 50%; background: rgba(255, 255, 255, .16); }
+.add-card:hover { transform: translateY(-8px) rotate(-.4deg); box-shadow: var(--shadow-lg); }
+.add-card .ic { font-size: 2.3rem; position: relative; }
+.add-card h3 { font-size: 1.1rem; margin: 8px 0 4px; position: relative; }
+.add-card p { font-size: .88rem; opacity: .95; position: relative; }
+.add-card .more { display: inline-block; margin-top: 12px; font-size: .82rem; font-weight: 600; position: relative; border-bottom: 2px solid rgba(255, 255, 255, .6); }
+.empty { text-align: center; color: var(--muted); padding: 24px; grid-column: 1 / -1; }
+
+/* modal */
+.modal { margin: auto; border: 0; border-radius: 26px; width: min(680px, 94vw); padding: 0; box-shadow: var(--shadow-lg); color: var(--ink); max-height: 90vh; overflow: auto; }
+.modal::backdrop { background: rgba(15, 27, 61, .65); backdrop-filter: blur(4px); }
+.modal[open] { animation: pop .3s ease; }
+@keyframes pop { from { opacity: 0; transform: scale(.94) translateY(10px); } }
+.modal-head { color: #fff; padding: 32px 32px 24px; }
+.modal-head .ic { font-size: 2.6rem; }
+.modal-head h3 { font-family: var(--font-head); font-size: 1.8rem; margin-top: 4px; }
+.modal-main { padding: 26px 32px 32px; }
+.modal-main h4 { color: var(--navy); margin: 18px 0 6px; font-size: 1rem; }
+.modal-main h4:first-child { margin-top: 0; }
+.modal-main p, .modal-main li { color: var(--muted); font-size: .94rem; }
+.modal-main ul { list-style: disc; padding-left: 20px; }
+.modal-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
+.modal-close { position: absolute; top: 14px; right: 14px; width: 38px; height: 38px; border-radius: 50%; border: 0; background: rgba(255, 255, 255, .25); color: #fff; font-size: 1rem; cursor: pointer; }
+
+/* ===== guide tabs ===== */
+.guide { background: var(--bg); border-radius: 26px; padding: 12px; max-width: 900px; margin: 0 auto 40px; box-shadow: var(--shadow); }
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; padding: 6px; }
+.tab { flex: 1 1 auto; border: 0; background: transparent; padding: 12px 18px; border-radius: 16px; font-weight: 600; font-size: .9rem; color: var(--muted); cursor: pointer; transition: .2s; }
+.tab:hover { color: var(--navy); }
+.tab.active { background: #fff; color: var(--indigo); box-shadow: var(--shadow); }
+.tab-panel { display: none; padding: 26px 28px 30px; }
+.tab-panel.active { display: block; animation: fadeUp .4s ease; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } }
+.tab-panel h3 { font-family: var(--font-head); font-size: 1.6rem; color: var(--navy); margin-bottom: 10px; }
+.tab-panel p { color: var(--muted); margin-bottom: 10px; }
+.ticks li { position: relative; padding-left: 30px; margin: 8px 0; color: var(--ink); }
+.ticks li::before { content: "✓"; position: absolute; left: 0; top: 1px; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: .75rem; color: #fff; background: var(--teal); }
+.format-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; margin-top: 8px; }
+.format-grid div { background: #fff; border-radius: 16px; padding: 16px; border-left: 5px solid var(--sun); }
+.format-grid div:nth-child(2) { border-color: var(--teal); }
+.format-grid div:nth-child(3) { border-color: var(--coral); }
+.format-grid div:nth-child(4) { border-color: var(--indigo); }
+.format-grid p { font-size: .88rem; margin: 4px 0 0; }
+
+/* quiz */
+.quiz-card { max-width: 900px; margin: 0 auto; border-radius: 26px; overflow: hidden; box-shadow: var(--shadow-lg); background: #fff; border: 1px solid var(--line); }
+.quiz-head { background: var(--grad-night); color: #fff; padding: 28px 32px; }
+.quiz-head h3 { font-family: var(--font-head); font-size: 1.6rem; }
+.quiz-head p { color: #cfd8ff; font-size: .92rem; }
+.quiz-form { padding: 24px 32px 32px; }
+.q-item { padding: 14px 0; border-bottom: 1px dashed var(--line); display: flex; gap: 14px; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+.q-item p { flex: 1 1 340px; font-size: .95rem; }
+.yn { display: flex; gap: 8px; }
+.yn label { cursor: pointer; }
+.yn input { position: absolute; opacity: 0; width: 0; }
+.yn span { display: inline-block; min-width: 64px; text-align: center; padding: 8px 16px; border-radius: 30px; border: 2px solid var(--line); font-weight: 600; font-size: .86rem; transition: .2s; }
+.yn input:checked + span { background: var(--navy); color: #fff; border-color: var(--navy); }
+.yn input:focus-visible + span { outline: 3px solid var(--sun); }
+.quiz-form .btn { margin-top: 22px; }
+.quiz-result { margin: 0 32px 32px; padding: 24px; border-radius: 20px; }
+.quiz-result h4 { font-family: var(--font-head); font-size: 1.4rem; margin-bottom: 6px; }
+.quiz-result .btn { margin-top: 14px; }
+.quiz-result.low { background: #ecfdf5; color: #065f46; }
+.quiz-result.mid { background: #fffbeb; color: #78450a; }
+.quiz-result.high { background: #fff1f0; color: #8a2a1e; }
+
+/* ===== cards / forms ===== */
+.card-box { background: #fff; border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow); border: 1px solid var(--line); }
+.card-box h3 { font-size: 1.15rem; color: var(--navy); margin-bottom: 10px; }
+.stack { display: flex; flex-direction: column; gap: 14px; }
+label { display: flex; flex-direction: column; gap: 6px; font-weight: 600; font-size: .88rem; color: var(--navy); }
+.hint { font-size: .84rem; color: var(--muted); margin: 6px 0 12px; }
+.check { flex-direction: row; align-items: flex-start; gap: 10px; font-weight: 400; color: var(--muted); }
+.check input { width: 20px; height: 20px; margin-top: 3px; accent-color: var(--indigo); }
+.inline-form { display: flex; gap: 10px; }
+.inline-form input { flex: 1; }
+
+/* ===== tracker ===== */
+.tracker-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 26px; align-items: stretch; }
+.display-box { display: flex; align-items: center; justify-content: center; background: linear-gradient(160deg, #fff, #f3f0ff); }
+.display-box > div { width: 100%; }
+.tracker-empty { text-align: center; color: var(--muted); }
+.big-emoji { font-size: 3.4rem; }
+.t-label { text-align: center; font-weight: 600; color: var(--indigo); }
+.ring-wrap { position: relative; width: 200px; height: 200px; margin: 14px auto; }
+.ring-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.ring-bg, .ring-fg { fill: none; stroke-width: 9; }
+.ring-bg { stroke: #e6eaf8; }
+.ring-fg { stroke: var(--coral); stroke-linecap: round; stroke-dasharray: 326.7; stroke-dashoffset: 326.7; transition: stroke-dashoffset 1s ease; }
+.ring-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.ring-center strong { font-family: var(--font-head); font-size: 3.4rem; line-height: 1; color: var(--navy); }
+.ring-center span { font-size: .8rem; color: var(--muted); }
+.stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 10px; }
+.stat-row div { background: #fff; border-radius: 16px; padding: 14px 6px; text-align: center; box-shadow: var(--shadow); }
+.stat-row strong { display: block; font-size: 1.45rem; font-family: var(--font-head); }
+.stat-row div:nth-child(1) strong { color: var(--coral); }
+.stat-row div:nth-child(2) strong { color: var(--indigo); }
+.stat-row div:nth-child(3) strong { color: var(--teal-d); }
+.stat-row span { font-size: .76rem; color: var(--muted); }
+.t-msg { text-align: center; margin-top: 14px; font-weight: 600; color: var(--navy); }
+#relapseBtn { margin-top: 14px; width: 100%; }
+
+.milestones { margin-top: 30px; }
+.milestones h3 { margin-bottom: 14px; color: var(--navy); }
+.badge-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(105px, 1fr)); gap: 12px; }
+.m-badge { background: #fff; border: 2px dashed var(--line); border-radius: 18px; padding: 14px 8px; text-align: center; color: #9aa3bd; transition: .4s; }
+.m-badge .mi { font-size: 1.8rem; filter: grayscale(1); opacity: .5; }
+.m-badge b { display: block; font-size: .9rem; }
+.m-badge small { font-size: .74rem; }
+.m-badge.got { border: 2px solid var(--sun); background: linear-gradient(160deg, #fffbeb, #fff); color: var(--navy); box-shadow: var(--shadow); }
+.m-badge.got .mi { filter: none; opacity: 1; animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 50% { transform: scale(1.12); } }
+
+.extras { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 30px; }
+.extras .wide { grid-column: 1 / -1; }
+.list li { display: flex; justify-content: space-between; gap: 10px; align-items: center; padding: 10px 14px; margin-top: 8px; background: var(--bg); border-radius: 12px; font-size: .92rem; }
+.x-btn { border: 0; background: none; color: #c0392b; cursor: pointer; font-weight: 700; }
+.pledge-count { margin-top: 12px; font-size: .9rem; color: var(--muted); font-weight: 500; }
+.mood-row { display: flex; gap: 8px; }
+.mood-row label { flex-direction: row; cursor: pointer; }
+.mood-row input { position: absolute; opacity: 0; width: 0; }
+.mood-row span { font-size: 1.6rem; width: 52px; height: 52px; display: grid; place-items: center; border-radius: 16px; border: 2px solid var(--line); transition: .2s; }
+.mood-row input:checked + span { border-color: var(--indigo); background: #eef2ff; transform: scale(1.1); }
+.journal-list { margin-top: 16px; display: grid; gap: 10px; }
+.journal-list li { background: var(--bg); border-radius: 14px; padding: 12px 16px; font-size: .92rem; border-left: 5px solid var(--teal); }
+.journal-list time { display: block; font-size: .74rem; color: var(--muted); }
+.journal-list .x-btn { float: right; }
+
+/* ===== counselors ===== */
+.counselor-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 28px; align-items: start; }
+.counselor-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 18px; }
+.c-person { background: #fff; border-radius: var(--radius); padding: 24px; text-align: center; box-shadow: var(--shadow); border: 1px solid var(--line); border-top: 6px solid var(--teal); transition: .3s; }
+.c-person:nth-child(3n+2) { border-top-color: var(--sun); }
+.c-person:nth-child(3n+3) { border-top-color: var(--coral); }
+.c-person:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+.avatar { width: 72px; height: 72px; margin: 0 auto 12px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-family: var(--font-head); font-size: 2rem; font-weight: 700; background: var(--grad-night); box-shadow: 0 8px 18px rgba(67, 56, 202, .3); }
+.c-person h4 { color: var(--navy); }
+.spec { display: inline-block; margin: 6px 0 8px; padding: 3px 14px; border-radius: 20px; font-size: .78rem; font-weight: 600; color: var(--teal-d); background: #d9f7f6; }
+.c-person p { font-size: .88rem; color: var(--muted); }
+.c-person small { color: var(--muted); display: block; margin-top: 4px; word-break: break-all; }
+.c-actions { display: flex; gap: 8px; justify-content: center; margin-top: 14px; flex-wrap: wrap; }
+.sel-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; background: #ecfdf5; color: #065f46; border-radius: 16px; padding: 12px 18px; margin-bottom: 18px; }
+.c-actions .remove { background: none; border: 0; color: #c0392b; cursor: pointer; font-weight: 600; font-size: .84rem; }
+
+/* ===== chat ===== */
+.chat-box { max-width: 800px; margin: 0 auto; background: #fff; border-radius: 26px; overflow: hidden; box-shadow: var(--shadow-lg); border: 1px solid var(--line); }
+.chat-locked { text-align: center; padding: 60px 24px; font-weight: 500; }
+.chat-locked .lock { font-size: 3.2rem; }
+.chat-top { display: flex; gap: 14px; flex-wrap: wrap; padding: 16px; background: var(--grad-teal); }
+.chat-top label { flex: 1 1 200px; color: #fff; }
+.chat-messages { height: 380px; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; background: linear-gradient(180deg, #f5f7ff, #fdf6f4); }
+.msg { max-width: 76%; padding: 11px 18px; border-radius: 20px; font-size: .94rem; overflow-wrap: anywhere; }
+.msg small { display: block; font-size: .7rem; opacity: .75; margin-bottom: 2px; }
+.msg.patient { align-self: flex-end; color: #fff; background: var(--grad-night); border-bottom-right-radius: 5px; }
+.msg.counselor { align-self: flex-start; background: #fff; border-bottom-left-radius: 5px; box-shadow: 0 3px 10px rgba(15, 27, 61, .08); }
+.chat-input { display: flex; gap: 10px; padding: 16px; background: #fff; border-top: 1px solid var(--line); }
+.chat-input input { flex: 1; }
+
+/* ===== payment ===== */
+.pay-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+.pay-card { position: relative; overflow: hidden; color: #fff; text-align: center; padding: 44px 36px; border-radius: 30px; background: var(--grad-night); box-shadow: var(--shadow-lg); }
+.pay-card::before { content: ""; position: absolute; width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(circle, rgba(251, 191, 36, .5), transparent 70%); top: -100px; right: -80px; }
+.pay-card > * { position: relative; }
+.pay-eyebrow { font-size: .76rem; letter-spacing: 3px; text-transform: uppercase; color: #cbd5ff; }
+.price { font-family: var(--font-head); font-size: 4.6rem; font-weight: 800; line-height: 1.1; }
+.price small { font-family: var(--font-body); font-size: 1.2rem; font-weight: 600; margin-right: 6px; color: var(--sun); }
+.price-sub { color: #cbd5ff; margin-bottom: 20px; }
+.pay-card input { border-color: transparent; }
+.pay-note { margin-top: 16px; font-weight: 600; }
+.pay-note.dark { color: var(--teal-d); margin-top: 0; }
+.pay-demo { display: block; margin-top: 10px; color: #aeb9e8; }
+
+/* ===== FAQ ===== */
+.faq details { background: #fff; border: 1px solid var(--line); border-radius: 18px; margin-bottom: 12px; box-shadow: var(--shadow); overflow: hidden; }
+.faq summary { cursor: pointer; padding: 18px 56px 18px 22px; font-weight: 600; color: var(--navy); list-style: none; position: relative; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: "+"; position: absolute; right: 22px; top: 50%; transform: translateY(-50%); width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--bg); font-size: 1.2rem; color: var(--indigo); transition: .3s; }
+.faq details[open] summary::after { content: "–"; background: var(--sun); color: var(--navy); }
+.faq details p { padding: 0 22px 20px; color: var(--muted); }
+
+/* ===== about & contact ===== */
+.about-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+.about-card { background: var(--bg); border-radius: var(--radius); padding: 32px 26px; text-align: center; box-shadow: var(--shadow); transition: .3s; }
+.about-card:hover { transform: translateY(-8px); }
+.ai { font-size: 2.6rem; margin-bottom: 6px; }
+.about-card h3 { color: var(--navy); margin-bottom: 6px; }
+.about-card p { color: var(--muted); font-size: .94rem; }
+
+.contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
+.contact-cards { display: grid; gap: 18px; }
+.c-card { display: flex; align-items: center; gap: 18px; color: #fff; padding: 24px; border-radius: var(--radius); box-shadow: var(--shadow); transition: .3s; }
+.c-card:hover { transform: translateX(8px); }
+.c-card > span { font-size: 2.2rem; }
+.c-card h3 { font-size: 1rem; }
+.c-card p, .c-card a { color: #fff; font-weight: 500; overflow-wrap: anywhere; }
+.c1 { background: var(--grad-teal); }
+.c2 { background: var(--grad-sun); color: var(--navy); }
+.c2 h3, .c2 p, .c2 a { color: var(--navy); }
+.c3 { background: var(--grad-night); }
+
+/* ===== footer ===== */
+.footer { background: var(--navy); color: #b9c3ec; padding: 60px 0 24px; }
+.foot-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.2fr; gap: 36px; }
+.foot-logo { font-size: 1.4rem; font-weight: 600; color: #fff; margin-bottom: 8px; }
+.foot-logo b { color: var(--sun); }
+.footer h4 { color: #fff; margin-bottom: 12px; }
+.footer a:not(.btn) { display: block; color: #b9c3ec; text-decoration: none; padding: 3px 0; font-size: .92rem; }
+.footer a:not(.btn):hover { color: var(--sun); }
+.footer .btn { margin-top: 10px; }
+.foot-base { border-top: 1px solid rgba(255, 255, 255, .1); margin-top: 40px; padding-top: 20px; font-size: .82rem; }
+
+/* ===== misc ===== */
+.to-top { position: fixed; right: 20px; bottom: 20px; z-index: 900; width: 48px; height: 48px; border-radius: 50%; border: 0; background: var(--grad-sun); color: var(--navy); font-size: 1.3rem; font-weight: 700; cursor: pointer; box-shadow: var(--shadow-lg); opacity: 0; pointer-events: none; transform: translateY(14px); transition: .3s; }
+.to-top.show { opacity: 1; pointer-events: auto; transform: none; }
+.toast { position: fixed; left: 50%; bottom: 24px; z-index: 4000; transform: translate(-50%, 30px); background: var(--navy); color: #fde68a; padding: 11px 22px; border-radius: 40px; font-size: .86rem; font-weight: 500; max-width: 92vw; text-align: center; box-shadow: var(--shadow-lg); opacity: 0; pointer-events: none; transition: .35s; }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* ===== responsive ===== */
+@media (max-width: 1100px) {
+  .menu-toggle { display: block; }
+  nav { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; align-items: stretch; padding: 14px 24px 22px; background: rgba(15, 27, 61, .98); }
+  nav.open { display: flex; }
+  nav a { padding: 12px 14px; }
+  nav a.nav-phone { margin: 8px 0 0; text-align: center; }
+}
+@media (max-width: 900px) {
+  .hero-inner, .tracker-grid, .counselor-layout, .pay-wrap, .contact-layout { grid-template-columns: 1fr; }
+  .hero { padding: 60px 0 100px; }
+  .hero-card { max-width: 360px; margin-inline: auto; }
+  .steps { grid-template-columns: repeat(2, 1fr); }
+  .extras { grid-template-columns: 1fr; }
+  .foot-grid { grid-template-columns: 1fr 1fr; }
+  .section { padding: 72px 0; }
+}
+@media (max-width: 560px) {
+  .steps { grid-template-columns: 1fr; }
+  .foot-grid { grid-template-columns: 1fr; }
+  .stat-row { grid-template-columns: 1fr; }
+  .quiz-form, .modal-main { padding-inline: 20px; }
+  .quiz-result { margin-inline: 20px; }
+  .tab { flex: 1 1 45%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .js .reveal { opacity: 1; transform: none; }
+}
+
+
+/* ==========================================================
+   Multi-page additions
+   ========================================================== */
+body { animation: pageIn .5s ease; transition: opacity .17s; }
+body.leaving { opacity: 0; }
+@keyframes pageIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* ----- dropdown menus ----- */
+.dd { position: relative; }
+.dd-btn { background: none; border: 0; cursor: pointer; color: #d6dcf5; font: inherit; font-size: .88rem; font-weight: 500; padding: 8px 12px; border-radius: 30px; transition: .2s; white-space: nowrap; }
+.dd-btn::after { content: " ▾"; font-size: .75em; }
+.dd-btn:hover, .dd.open .dd-btn { color: #fff; background: rgba(255, 255, 255, .1); }
+.dd-btn.active { color: var(--navy); background: var(--sun); }
+.dd-menu { position: absolute; top: 100%; left: 0; min-width: 210px; display: none; flex-direction: column; gap: 2px; background: #16224d; border: 1px solid rgba(255, 255, 255, .12); border-radius: 16px; padding: 8px; box-shadow: var(--shadow-lg); z-index: 1100; }
+.dd:hover .dd-menu, .dd.open .dd-menu, .dd:focus-within .dd-menu { display: flex; }
+.dd-menu a { border-radius: 10px; }
+
+/* ----- inner page banner ----- */
+.page-hero { position: relative; overflow: hidden; color: #fff; background: var(--grad-night); padding: 60px 0 68px; }
+.page-hero::before { content: ""; position: absolute; width: 380px; height: 380px; border-radius: 50%; right: -90px; top: -150px; background: radial-gradient(circle, rgba(251, 191, 36, .45), transparent 70%); }
+.page-hero::after { content: ""; position: absolute; width: 320px; height: 320px; border-radius: 50%; left: -100px; bottom: -170px; background: radial-gradient(circle, rgba(14, 165, 164, .5), transparent 70%); }
+.page-hero .wrap { position: relative; z-index: 2; }
+.page-hero h1 { font-family: var(--font-head); font-size: clamp(2.2rem, 5vw, 3.6rem); line-height: 1.1; margin: 10px 0; }
+.page-hero p { color: #dfe5ff; max-width: 640px; }
+.crumbs { font-size: .84rem; color: #b9c3ec; }
+.crumbs a { color: #fff; text-decoration: none; }
+.crumbs a:hover { text-decoration: underline; }
+
+/* ----- home: feature tiles, stats, cta ----- */
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 22px; }
+.tile { position: relative; overflow: hidden; display: block; min-height: 200px; padding: 28px; border-radius: var(--radius); color: #fff; text-decoration: none; box-shadow: var(--shadow); transition: transform .3s, box-shadow .3s; }
+.tile::after { content: ""; position: absolute; width: 170px; height: 170px; border-radius: 50%; right: -60px; top: -60px; background: rgba(255, 255, 255, .15); }
+.tile:hover { transform: translateY(-8px) scale(1.02); box-shadow: var(--shadow-lg); }
+.tile .t-ic { font-size: 2.5rem; position: relative; }
+.tile h3 { margin: 8px 0 6px; font-size: 1.2rem; position: relative; }
+.tile p { font-size: .9rem; opacity: .95; position: relative; max-width: 90%; }
+.tile .go { position: absolute; right: 22px; bottom: 16px; font-size: 1.5rem; transition: transform .3s; }
+.tile:hover .go { transform: translateX(8px); }
+
+.stats-band { background: var(--navy); color: #fff; padding: 56px 0; }
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; text-align: center; }
+.stat-box strong { display: block; font-family: var(--font-head); font-size: 3.2rem; color: var(--sun); line-height: 1.1; }
+.stat-box span { color: #b9c3ec; font-size: .92rem; }
+
+.cta-band { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 22px; padding: 38px 40px; border-radius: 28px; color: #fff; background: var(--grad-night); box-shadow: var(--shadow-lg); }
+.cta-band h2 { font-family: var(--font-head); font-size: 1.9rem; }
+.cta-band p { color: #cfd8ff; }
+
+/* ----- book library ----- */
+.books-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 28px; }
+.book-card { background: none; border: 0; text-align: left; cursor: pointer; font: inherit; color: inherit; transition: transform .3s; }
+.book-card:hover { transform: translateY(-10px) rotate(-1deg); }
+.cover { position: relative; aspect-ratio: 2 / 3; border-radius: 6px 14px 14px 6px; color: #fff; padding: 18px 16px; display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden; box-shadow: var(--shadow-lg), inset 9px 0 0 rgba(0, 0, 0, .18); }
+.cover::after { content: ""; position: absolute; width: 150px; height: 150px; border-radius: 50%; right: -50px; top: -50px; background: rgba(255, 255, 255, .14); }
+.cover b { position: relative; font-family: var(--font-head); font-size: 1.05rem; line-height: 1.2; }
+.cover i { position: relative; font-style: normal; font-size: .78rem; opacity: .9; margin-top: 6px; }
+.cover-n { position: absolute; top: 12px; left: 18px; font-family: var(--font-head); font-size: 1.7rem; opacity: .5; z-index: 1; }
+.cover.big { width: 170px; flex: none; }
+.book-info { padding: 14px 4px 0; }
+.book-info h3 { font-size: 1rem; color: var(--navy); line-height: 1.3; }
+.book-info .by { font-size: .82rem; color: var(--muted); }
+.book-info .pg { font-size: .82rem; font-weight: 600; color: var(--teal-d); margin-top: 2px; }
+.note-box { max-width: 820px; margin: 0 auto 32px; background: #fff7e6; color: #7c4a03; border-radius: 16px; padding: 14px 20px; font-size: .9rem; }
+.book-detail { display: flex; gap: 24px; padding: 30px 30px 8px; flex-wrap: wrap; }
+.book-detail > div:last-child { flex: 1; min-width: 220px; }
+.book-detail h3 { font-family: var(--font-head); font-size: 1.7rem; color: var(--navy); line-height: 1.2; }
+.book-detail .by { color: var(--muted); font-size: .9rem; margin-bottom: 4px; }
+.book-detail p { margin-bottom: 8px; font-size: .94rem; }
+.plan-box { margin: 10px 30px 30px; padding: 20px; background: var(--bg); border-radius: 20px; }
+.plan-box h4 { color: var(--navy); margin-bottom: 8px; }
+.plan-box label { font-weight: 500; }
+input[type=range] { padding: 0; height: 28px; accent-color: var(--indigo); border: 0; background: none; box-shadow: none; }
+.calc { margin: 12px 0 6px; font-weight: 600; color: var(--indigo); }
+.sched { display: grid; gap: 4px; font-size: .88rem; color: var(--muted); }
+.sched b { color: var(--navy); margin-right: 6px; }
+.modal-close.dark { background: var(--bg); color: var(--ink); z-index: 3; }
+
+/* ----- tracker: reading gate ----- */
+.rule-banner { background: linear-gradient(90deg, #ecfeff, #f5f3ff); border: 1px solid #d6e4ff; border-radius: 18px; padding: 16px 22px; margin-bottom: 26px; color: var(--navy); font-size: .94rem; }
+.read-setup { background: var(--bg); border-radius: 18px; padding: 16px; display: grid; gap: 12px; }
+.read-setup h4 { color: var(--navy); }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.link-small { font-size: .84rem; font-weight: 600; text-decoration: none; }
+.reading-card { margin-top: 26px; border-top: 6px solid var(--teal); }
+.read-head { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+.read-head > div:nth-child(2) { flex: 1; min-width: 200px; }
+.read-head h3 { margin: 0; }
+.book-mini { width: 56px; height: 76px; flex: none; border-radius: 6px 10px 10px 6px; color: #fff; display: grid; place-items: center; font-family: var(--font-head); font-weight: 700; box-shadow: var(--shadow); }
+.eyebrow-s { font-size: .74rem; letter-spacing: 2px; text-transform: uppercase; color: var(--coral); font-weight: 700; }
+.chip-status { padding: 7px 16px; border-radius: 30px; font-size: .84rem; font-weight: 600; }
+.chip-status.ok { background: #dcfce7; color: #166534; }
+.chip-status.lock { background: #fff7e6; color: #9a5b00; }
+.chip-status.warn { background: #fee2e2; color: #991b1b; }
+#readForm { margin-top: 16px; padding-top: 16px; border-top: 2px dashed var(--line); }
+.read-assign { background: var(--bg); border-radius: 14px; padding: 12px 16px; font-size: .94rem; }
+.word-meter { height: 8px; background: #e6eaf8; border-radius: 8px; overflow: hidden; }
+.word-meter i { display: block; height: 100%; width: 0; background: var(--grad-teal); transition: width .3s; }
+.info-ok { margin-top: 14px; background: #ecfdf5; color: #065f46; border-radius: 14px; padding: 14px 18px; }
+#nextBookBox { margin-top: 18px; padding: 18px; border-radius: 18px; background: #fff7e6; }
+#nextBookBox h4 { color: #7c4a03; margin-bottom: 8px; }
+
+/* ----- pricing ----- */
+.pay-layout { display: grid; grid-template-columns: 1.4fr .8fr; gap: 28px; align-items: start; }
+.pm-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.pm { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 16px 10px; background: #fff; border: 2px solid var(--line); border-radius: 18px; cursor: pointer; transition: .2s; font: inherit; }
+.pm:hover { border-color: var(--indigo); transform: translateY(-3px); }
+.pm.active { border-color: var(--indigo); background: #eef2ff; box-shadow: 0 0 0 4px rgba(67, 56, 202, .15); }
+.pm-ic { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 700; font-size: 1.1rem; }
+.pm-name { font-weight: 600; font-size: .88rem; color: var(--navy); }
+.pm-price { font-size: .76rem; color: var(--muted); }
+.pay-panel { margin-top: 22px; padding-top: 22px; border-top: 2px dashed var(--line); min-height: 120px; }
+.pay-panel h3 { margin-bottom: 4px; }
+.field-err { color: #c0392b; font-size: .86rem; min-height: 1.2em; }
+.wallet-btn { width: 100%; padding: 15px; font-size: 1.05rem; color: #fff; border-radius: 50px; }
+.wallet-btn.paypal { background: #1d4ed8; }
+.wallet-btn.paypal i { color: #7dd3fc; margin-left: 1px; }
+.wallet-btn.googlepay { background: #111827; }
+.bank-box { display: grid; gap: 8px; background: var(--bg); border-radius: 14px; padding: 16px; }
+.bank-box div { display: flex; justify-content: space-between; gap: 10px; }
+.bank-box span { color: var(--muted); font-size: .86rem; }
+.summary { position: sticky; top: 100px; text-align: left; }
+.summary h3 { font-family: var(--font-head); font-size: 1.6rem; margin: 6px 0 14px; }
+.sum-row { display: flex; justify-content: space-between; gap: 10px; padding: 10px 0; border-bottom: 1px dashed rgba(255, 255, 255, .25); }
+.sum-row.total { font-size: 1.2rem; border-bottom: 0; color: var(--sun); }
+.summary .ticks { margin-top: 14px; }
+.summary .ticks li { color: #fff; }
+.pay-done { text-align: center; padding: 14px 6px; }
+.pay-done h3 { font-family: var(--font-head); font-size: 1.6rem; }
+.pay-done .btn { margin-top: 14px; }
+.pay-banner { background: #ecfdf5; color: #065f46; border-radius: 16px; padding: 14px 18px; margin-bottom: 22px; font-weight: 500; }
+.spin { width: 16px; height: 16px; border: 3px solid rgba(15, 27, 61, .25); border-top-color: var(--navy); border-radius: 50%; display: inline-block; animation: spin .7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ----- about ----- */
+.rule-list { counter-reset: r; display: grid; gap: 14px; max-width: 820px; margin: 36px auto 0; }
+.rule-list li { counter-increment: r; position: relative; background: var(--bg); border-radius: 18px; padding: 18px 20px 18px 66px; }
+.rule-list li::before { content: counter(r); position: absolute; left: 18px; top: 16px; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 700; background: var(--grad-night); }
+
+/* ----- chat page ----- */
+.chat-locked a { font-weight: 600; }
+
+/* ----- confetti ----- */
+.confetti { position: fixed; inset: 0; z-index: 5000; pointer-events: none; overflow: hidden; }
+.confetti i { position: absolute; top: -16px; width: 9px; height: 14px; border-radius: 2px; animation: fall 2s ease-in forwards; }
+@keyframes fall { to { transform: translateY(110vh) rotate(720deg); opacity: .8; } }
+
+@media (max-width: 1100px) {
+  .dd-btn { text-align: left; padding: 12px 14px; }
+  .dd-btn::after { content: ""; }
+  .dd-menu, .dd:hover .dd-menu { position: static; display: flex; background: transparent; border: 0; box-shadow: none; padding: 0 0 0 14px; }
+}
+@media (max-width: 900px) {
+  .pay-layout { grid-template-columns: 1fr; }
+  .summary { position: static; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .page-hero { padding: 44px 0 52px; }
+  .cta-band { padding: 28px 24px; }
+}
+@media (max-width: 560px) {
+  .two { grid-template-columns: 1fr; }
+  .book-detail { padding: 24px 20px 6px; }
+  .plan-box { margin: 10px 20px 24px; }
+  .books-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
+}
+
+/* ==========================================================
+   Single-page views, Handbooks, Meetings
+   ========================================================== */
+.view { display: none; }
+.view.active { display: block; animation: viewIn .4s ease both; }
+@keyframes viewIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+nav#navLinks a, .dd-btn { font-size: .85rem; }
+@media (min-width: 1101px) { nav#navLinks { gap: 0; } nav#navLinks > a, .dd-btn { padding: 8px 10px; } }
+
+/* ----- handbooks ----- */
+.hb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 22px; margin-top: 8px; }
+.hb-card { position: relative; overflow: hidden; text-align: left; border: 0; cursor: pointer; font: inherit; color: #fff; padding: 28px 24px 24px; min-height: 250px; border-radius: var(--radius); background: var(--g); box-shadow: var(--shadow); transition: transform .3s, box-shadow .3s; display: flex; flex-direction: column; gap: 8px; }
+.hb-card::after { content: ""; position: absolute; width: 190px; height: 190px; border-radius: 50%; right: -70px; top: -70px; background: rgba(255, 255, 255, .15); }
+.hb-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); }
+.hb-ic { font-size: 2.4rem; position: relative; }
+.hb-card h3 { font-family: var(--font-head); font-size: 1.35rem; line-height: 1.2; position: relative; }
+.hb-card p { font-size: .9rem; opacity: .95; position: relative; flex: 1; }
+.hb-meta { font-size: .78rem; font-weight: 600; background: rgba(0, 0, 0, .22); border-radius: 30px; padding: 5px 12px; align-self: flex-start; position: relative; }
+.hb-reader { padding: 32px 32px 8px; max-width: 760px; }
+.hb-reader h2 { font-family: var(--font-head); font-size: 1.9rem; color: var(--navy); line-height: 1.2; margin-bottom: 4px; }
+.hb-reader .by { color: var(--muted); font-size: .88rem; margin-bottom: 14px; }
+.hb-toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 18px; }
+.hb-toc button { border: 1px solid var(--line); background: #fff; border-radius: 30px; padding: 6px 14px; font: inherit; font-size: .8rem; cursor: pointer; color: var(--navy); }
+.hb-toc button:hover { background: var(--bg); }
+.hb-ch { margin-bottom: 20px; }
+.hb-ch h3 { color: var(--indigo); font-size: 1.15rem; margin-bottom: 6px; }
+.hb-ch p { margin-bottom: 8px; font-size: .95rem; }
+.hb-ch ul { margin: 6px 0 8px 20px; display: grid; gap: 4px; font-size: .95rem; }
+.hb-warn { background: #fff7e6; color: #7c4a03; border-radius: 14px; padding: 12px 16px; font-size: .9rem; margin-bottom: 12px; }
+.hb-actions { position: sticky; bottom: 0; display: flex; gap: 10px; flex-wrap: wrap; padding: 14px 32px 20px; background: linear-gradient(transparent, #fff 30%); }
+
+/* ----- meetings ----- */
+.next-up { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding: 24px 28px; border-radius: 24px; color: #fff; background: var(--grad-night); box-shadow: var(--shadow-lg); margin-bottom: 26px; }
+.next-up small { color: var(--sun); font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
+.next-up h3 { font-family: var(--font-head); font-size: 1.5rem; margin: 4px 0; }
+.next-up p { color: #cfd8ff; }
+.count-chip { font-family: var(--font-head); font-size: 1.5rem; color: var(--sun); }
+.meet-list { display: grid; gap: 16px; margin-top: 8px; }
+.meet-card { display: grid; grid-template-columns: 96px 1fr auto; gap: 20px; align-items: center; background: #fff; border-radius: 22px; padding: 20px 22px; box-shadow: var(--shadow); border-left: 6px solid var(--c, var(--indigo)); }
+.meet-day { text-align: center; background: var(--bg); border-radius: 16px; padding: 12px 6px; }
+.meet-day b { display: block; font-size: 1.25rem; color: var(--navy); font-family: var(--font-head); }
+.meet-day span { font-size: .78rem; color: var(--muted); }
+.meet-card h3 { color: var(--navy); font-size: 1.1rem; margin-bottom: 2px; }
+.meet-card p { font-size: .88rem; color: var(--muted); }
+.meet-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; font-size: .78rem; }
+.meet-meta span { background: var(--bg); border-radius: 30px; padding: 4px 12px; color: var(--navy); font-weight: 500; }
+.meet-meta .soon { background: #fee2e2; color: #991b1b; font-weight: 700; }
+.meet-act { display: grid; gap: 8px; min-width: 150px; }
+.btn.going { background: #dcfce7; color: #166534; box-shadow: none; }
+@media (max-width: 760px) {
+  .meet-card { grid-template-columns: 1fr; }
+  .meet-day { display: flex; gap: 10px; align-items: baseline; justify-content: flex-start; padding: 10px 14px; }
+  .hb-reader { padding: 24px 20px 8px; }
+  .hb-actions { padding: 12px 20px 18px; }
+}
+@media print {
+  .navbar, .crisis-bar, .footer, .to-top, .scroll-progress { display: none !important; }
+}
+
+  </style>
+</head>
+<body data-page="home">
+  <div class="scroll-progress" id="scrollProgress"></div>
+  <div class="crisis-bar"><span>🚨 In immediate danger or thinking of harming yourself? Call <strong>999</strong> or <strong>112</strong> now.</span></div>
+
+  <header class="navbar" id="navbar">
+    <a href="#home" class="logo" aria-label="Addiction Saver home">
+      <svg class="logo-mark" viewBox="0 0 40 40" aria-hidden="true">
+        <defs><linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbbf24"/><stop offset="1" stop-color="#f97362"/></linearGradient></defs>
+        <circle cx="20" cy="20" r="19" fill="url(#lg1)"/>
+        <path d="M20 9c3 4 7 6.5 7 11.5a7 7 0 0 1-14 0C13 15.5 17 13 20 9z" fill="#0f1b3d"/>
+        <path d="M20 17c1.5 2 3.5 3 3.5 5.5a3.5 3.5 0 0 1-7 0c0-2.5 2-3.5 3.5-5.5z" fill="#fbbf24"/>
+      </svg>
+      <span>Addiction <b>Saver</b></span>
+    </a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false">☰</button>
+    <nav id="navLinks" aria-label="Main">
+      <a href="#home" data-page="home">Home</a>
+      <div class="dd"><button class="dd-btn" aria-expanded="false" aria-haspopup="true">Learn</button>
+        <div class="dd-menu"><a href="#addictions" data-page="addictions">Addictions</a><a href="#counselling" data-page="counselling">Counselling guide</a><a href="#books" data-page="books">Book library</a></div></div>
+      <a href="#handbooks" data-page="handbooks">Handbooks</a>
+      <a href="#meetings" data-page="meetings">Meetings</a>
+      <a href="#tracker" data-page="tracker">My Tracker</a>
+      <div class="dd"><button class="dd-btn" aria-expanded="false" aria-haspopup="true">Support</button>
+        <div class="dd-menu"><a href="#counselors" data-page="counselors">Counselors</a><a href="#chat" data-page="chat">Private chat</a></div></div>
+      <a href="#pricing" data-page="pricing">Pricing</a>
+      <a href="#about" data-page="about">About Us</a>
+      <a href="#contact" data-page="contact">Contact Us</a>
+      <a href="#contact" class="nav-phone">📞 Get help</a>
+    </nav>
+  </header>
+
+  <div class="view active" id="view-home" data-view="home">
+  <main>
+  <section class="hero" id="home">
+    <div class="hero-bg" aria-hidden="true"><i class="orb o1"></i><i class="orb o2"></i><i class="orb o3"></i></div>
+    <div class="hero-inner">
+      <div class="hero-copy reveal">
+        <span class="pill">✨ Confidential support, day by day</span>
+        <h1>Addiction <em>Saver</em></h1>
+        <p class="lead">Understand what you are facing, read a little every day, count your clean days and talk privately one-on-one with a caring counselor. You do not have to do this alone.</p>
+        <div class="hero-cta">
+          <a href="#tracker" class="btn btn-sun">Start my day counter</a>
+          <a href="#books" class="btn btn-outline">Browse the books</a>
+        </div>
+        <ul class="trust-row"><li>🔒 Private &amp; judgment-free</li><li>📚 10 reference books</li><li>💚 Only KES 130</li></ul>
+      </div>
+      <aside class="hero-card reveal" aria-label="Example streak preview">
+        <p class="hc-eyebrow">Example streak</p>
+        <div class="mini-ring"><svg viewBox="0 0 120 120"><circle class="m-bg" cx="60" cy="60" r="52"/><circle class="m-fg" cx="60" cy="60" r="52"/></svg>
+          <div class="mini-ring-text"><strong>21</strong><span>days clean</span></div></div>
+        <div class="hc-line"><span>Goal 30 days</span><span>9 to go</span></div>
+        <div class="bar"><i style="width:70%"></i></div>
+        <p class="hc-note">📖 Today: pages 211 to 220 ✔</p>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section tight">
+    <div class="wrap">
+      <header class="sec-head reveal"><span class="eyebrow">How it works</span><h2>Four simple steps</h2></header>
+      <ol class="steps">
+        <li class="step reveal"><span class="step-n">1</span><h3>Learn</h3><p>Read about the addiction you face and check the warning signs.</p></li>
+        <li class="step reveal"><span class="step-n">2</span><h3>Choose a book</h3><p>Pick one of 10 books and the number of days to finish it.</p></li>
+        <li class="step reveal"><span class="step-n">3</span><h3>Read &amp; track</h3><p>Read your daily pages. Each checked-in day unlocks the next.</p></li>
+        <li class="step reveal"><span class="step-n">4</span><h3>Talk</h3><p>Unlock counselors and chat privately, one-on-one.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <header class="sec-head reveal"><span class="eyebrow">Explore</span><h2>Everything has its own page</h2><p>Pick where you want to go.</p></header>
+      <div class="tiles"><a class="tile reveal" href="#addictions" style="background:linear-gradient(135deg,#f59e0b,#ea580c)"><div class="t-ic">🧠</div><h3>Addictions</h3><p>16 addictions explained: signs, how counselling helps and a first step.</p><span class="go">→</span></a><a class="tile reveal" href="#counselling" style="background:linear-gradient(135deg,#0ea5a4,#0369a1)"><div class="t-ic">🎓</div><h3>Counselling guide</h3><p>What counselling is, a private self-check and common questions.</p><span class="go">→</span></a><a class="tile reveal" href="#books" style="background:linear-gradient(135deg,#6d28d9,#ec4899)"><div class="t-ic">📚</div><h3>Book library</h3><p>10 reference books on addiction. Pick one and split it into daily pages.</p><span class="go">→</span></a><a class="tile reveal" href="#handbooks" style="background:linear-gradient(135deg,#f59e0b,#be185d)"><div class="t-ic">📘</div><h3>Handbooks</h3><p>Five practical guides: first 30 days, relapse prevention, family, cravings and counselors.</p><span class="go">→</span></a><a class="tile reveal" href="#meetings" style="background:linear-gradient(135deg,#0ea5a4,#6d28d9)"><div class="t-ic">🗓️</div><h3>Meetings</h3><p>Join group meetings, RSVP and add them to your calendar.</p><span class="go">→</span></a><a class="tile reveal" href="#tracker" style="background:linear-gradient(135deg,#16a34a,#0f766e)"><div class="t-ic">📅</div><h3>My tracker</h3><p>Count clean days. Read your daily pages to unlock each new day.</p><span class="go">→</span></a><a class="tile reveal" href="#counselors" style="background:linear-gradient(135deg,#3b82f6,#4338ca)"><div class="t-ic">👥</div><h3>Counselors</h3><p>Meet and add the counselors on the platform.</p><span class="go">→</span></a><a class="tile reveal" href="#chat" style="background:linear-gradient(135deg,#ec4899,#be185d)"><div class="t-ic">💬</div><h3>Private chat</h3><p>Talk one-on-one with the counselor you choose.</p><span class="go">→</span></a><a class="tile reveal" href="#pricing" style="background:linear-gradient(135deg,#0f1b3d,#4338ca)"><div class="t-ic">💳</div><h3>Pricing</h3><p>KES 130 for counselor access. Pay by M-Pesa, card, PayPal and more.</p><span class="go">→</span></a><a class="tile reveal" href="#about" style="background:linear-gradient(135deg,#fb923c,#dc2626)"><div class="t-ic">❤️</div><h3>About us</h3><p>Why we built Addiction Saver and how the daily reading rule works.</p><span class="go">→</span></a><a class="tile reveal" href="#contact" style="background:linear-gradient(135deg,#06b6d4,#0e7490)"><div class="t-ic">📞</div><h3>Contact us</h3><p>Call, email or ask for a call back.</p><span class="go">→</span></a></div>
+    </div>
+  </section>
+
+  <section class="stats-band">
+    <div class="wrap stats-grid">
+      <div class="stat-box"><strong data-count="16">16</strong><span>Addictions explained</span></div>
+      <div class="stat-box"><strong data-count="10">10</strong><span>Reference books</span></div>
+      <div class="stat-box"><strong data-count="6">6</strong><span>Ways to pay</span></div>
+      <div class="stat-box"><strong data-count="130">130</strong><span>KES for counselor access</span></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="cta-band reveal">
+        <div><h2>Ready for day one?</h2><p>Choose a book, set your goal and start counting today.</p></div>
+        <a class="btn btn-sun" href="#tracker">Start my tracker</a>
+      </div>
+    </div>
+  </section>
+  </main>
+  </div>
+  <div class="view" id="view-addictions" data-view="addictions">
+  <main>
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="crumbs"><a href="#home">Home</a> › <span>Understanding addictions</span></div>
+      <h1>Understanding addictions</h1>
+      <p>Addiction is not a weakness or a lack of willpower. Choose a topic to read about signs, how counselling helps and a first step.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="explorer-tools reveal">
+        <label class="search-box"><span class="sr-only">Search addictions</span><input type="search" id="addSearch" placeholder="🔍  Search an addiction e.g. alcohol, gaming..."></label>
+        <div class="chips" id="addChips">
+          <button class="chip active" data-cat="all">All</button><button class="chip" data-cat="substance">Substances</button>
+          <button class="chip" data-cat="behaviour">Behaviours</button><button class="chip" data-cat="digital">Digital</button>
+          <button class="chip" data-cat="intimacy">Sexual &amp; intimacy</button>
+        </div>
+      </div>
+      <div class="add-grid" id="addictionCards"></div>
+      <p class="empty hidden" id="addEmpty">No match found. Try another word.</p>
+    </div>
+  </section>
+  </main>
+  </div>
+  <div class="view" id="view-counselling" data-view="counselling">
+  <main>
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="crumbs"><a href="#home">Home</a> › <span>Understanding addiction counselling</span></div>
+      <h1>Understanding addiction counselling</h1>
+      <p>What counselling is, how it helps and whether it could be right for you.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="guide reveal">
+        <div class="tabs" role="tablist" id="guideTabs">
+          <button class="tab active" role="tab" data-tab="what">What it is</button>
+          <button class="tab" role="tab" data-tab="view">How counsellors see addiction</button>
+          <button class="tab" role="tab" data-tab="benefits">Benefits</button>
+          <button class="tab" role="tab" data-tab="formats">Formats</button>
+        </div>
+        <div class="tab-panel active" id="tab-what"><h3>A safe space to talk</h3>
+          <p>Addiction counselling is talking with a trained professional who helps you understand why you use a substance or behaviour, what sets off the urge, and how to live differently. It looks beyond the habit itself to stress, relationships, emotions and past experiences.</p>
+          <p>Sessions are private. You are not judged, and you set the pace.</p></div>
+        <div class="tab-panel" id="tab-view"><h3>Addiction has many sides</h3>
+          <p>Counsellors usually see addiction as a mix of physical, emotional and social factors, and as something that can come and go in waves. Treatment focuses on understanding causes rather than assigning blame.</p>
+          <p>Stopping is only the first step. Lasting change also means dealing with what was underneath it.</p></div>
+        <div class="tab-panel" id="tab-benefits"><h3>What you can gain</h3>
+          <ul class="ticks"><li>Practical coping skills for cravings and stress</li><li>Learning to spot and manage your triggers</li><li>A plan to prevent relapse, and what to do after a slip</li><li>Stronger emotional resilience and better relationships</li><li>Someone steady in your corner</li></ul></div>
+        <div class="tab-panel" id="tab-formats"><h3>Different ways to get help</h3>
+          <div class="format-grid"><div><b>Individual</b><p>Private sessions, just you and your counselor.</p></div><div><b>Group</b><p>Sharing with others who understand what you face.</p></div><div><b>Family</b><p>Helping loved ones understand and support you.</p></div><div><b>Online chat</b><p>Message your counselor from home, at your own pace.</p></div></div></div>
+      </div>
+
+      <div class="quiz-card reveal">
+        <div class="quiz-head"><h3>Do you need support? A quick self-check</h3><p>Answer honestly. This is not a diagnosis, just a way to reflect.</p></div>
+        <form id="quizForm" class="quiz-form" novalidate><div id="quizQuestions"></div><button class="btn btn-sun" type="submit">See my result</button></form>
+        <div class="quiz-result hidden" id="quizResult" aria-live="polite"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap narrow">
+      <header class="sec-head reveal"><span class="eyebrow">FAQ</span><h2>Questions people ask</h2></header>
+      <div class="faq reveal">
+        <details><summary>Is counselling alone enough?</summary><p>For many people counselling works best together with other support, such as medical care for withdrawal, peer groups and family. A counselor can help you decide what mix suits you.</p></details>
+        <details><summary>What if I slip or relapse?</summary><p>Slips are common in recovery and do not erase your progress. Reset the tracker, write in your journal about what happened, and talk to your counselor about a plan.</p></details>
+        <details><summary>Is it private?</summary><p>Chats are one-on-one between you and the counselor you pick. Do not share passwords or card details in chat.</p></details>
+        <details><summary>Can I get help for more than one addiction?</summary><p>Yes. Many people struggle with more than one habit. Tell your counselor everything that is on your mind.</p></details>
+      </div>
+    </div>
+  </section>
+  </main>
+  </div>
+  <div class="view" id="view-books" data-view="books">
+  <main>
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="crumbs"><a href="#home">Home</a> › <span>Book library</span></div>
+      <h1>Book library</h1>
+      <p>Ten reference books on addiction. Choose one, pick how many days to take, and your daily reading plan is worked out for you.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="note-box reveal"><b>How it works:</b> open a book, slide the number of days, and see your pages a day (pages ÷ days). Then use it in your tracker. Page counts come from publisher and retailer listings and differ between editions, so you can type the page count of your own copy in the tracker.</div>
+      <div class="explorer-tools reveal">
+        <label class="search-box"><span class="sr-only">Search books</span><input type="search" id="bookSearch" placeholder="🔍  Search by title, author or topic..."></label>
+        <div class="chips" id="bookChips">
+          <button class="chip active" data-cat="all">All</button><button class="chip" data-cat="substance">Substances</button>
+          <button class="chip" data-cat="digital">Digital</button><button class="chip" data-cat="intimacy">Sexual &amp; intimacy</button>
+          <button class="chip" data-cat="behaviour">Behaviours</button><button class="chip" data-cat="mind">Science &amp; recovery</button>
+        </div>
+      </div>
+      <div class="books-grid" id="bookGrid"></div>
+      <p class="empty hidden" id="bookEmpty">No book matches your search.</p>
+    </div>
+  </section>
+  </main>
+  </div>
+  <div class="view" id="view-handbooks" data-view="handbooks">
+  <main>
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="crumbs"><a href="#home">Home</a> › <span>Handbooks</span></div>
+      <h1>Handbooks</h1>
+      <p>Plain-language guides you can read here, download or print.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="note-box reveal"><b>Safety first:</b> these handbooks are educational and do not replace medical care. Stopping alcohol or sedatives suddenly can be dangerous, so speak to a doctor first. In an emergency call <b>999</b> or <b>112</b>.</div>
+      <div class="explorer-tools reveal"><label class="search-box"><span class="sr-only">Search handbooks</span><input type="search" id="hbSearch" placeholder="🔍  Search handbooks e.g. relapse, family..."></label></div>
+      <div class="hb-grid" id="hbGrid"></div>
+      <p class="empty hidden" id="hbEmpty">No handbook matches your search.</p>
+    </div>
+  </section>
+</main>
+  </div>
+  <div class="view" id="view-meetings" data-view="meetings">
+  <main>
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="crumbs"><a href="#home">Home</a> › <span>Support meetings</span></div>
+      <h1>Support meetings</h1>
+      <p>Join a group, share what you are facing and hear from others. All times are East Africa Time (EAT).</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="next-up reveal" id="nextUp"></div>
+      <div class="explorer-tools left reveal">
+        <div class="chips" id="meetChips">
+          <button class="chip active" data-cat="all">All</button><button class="chip" data-cat="checkin">Daily check-in</button>
+          <button class="chip" data-cat="substances">Substances</button><button class="chip" data-cat="digital">Digital</button>
+          <button class="chip" data-cat="family">Family</button><button class="chip" data-cat="newcomers">Newcomers</button>
+        </div>
+      </div>
+      <p class="hint" id="meetMine"></p>
+      <div class="meet-list" id="meetList"></div>
+      <p class="empty hidden" id="meetEmpty">No meetings in this group.</p>
+    </div>
+  </section>
+</main>
+  </div>
+  <div class="view" id="view-tracker" data-view="tracker">
+  <main>
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="crumbs"><a href="#home">Home</a> › <span>My day tracker</span></div>
+      <h1>My day tracker</h1>
+      <p>Count your clean days. Each day counts once your daily reading is checked in.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="rule-banner reveal"><b>How days count:</b> choose a book, pick how many days to finish it, and your pages are split evenly (pages ÷ days). Read today's pages and check in with a short reflection. That unlocks tomorrow. Missed a day? Catch up and your streak continues.</div>
+
+      <div class="tracker-grid">
+        <div class="card-box reveal">
+          <h3>Start your streak</h3>
+          <form id="trackerForm" class="stack">
+            <label>I am quitting<select id="trackAddiction"></select></label>
+            <div class="two">
+              <label>My goal (days)<input type="number" id="trackGoal" min="1" max="3650" value="30" required></label>
+              <label>Money spent per day (KES)<input type="number" id="trackSpend" min="0" max="100000" value="0"></label>
+            </div>
+            <div class="read-setup">
+              <h4>📚 My daily reading</h4>
+              <label>Book<select id="trackBook"></select></label>
+              <div class="two">
+                <label>Pages in my copy<input type="number" id="trackPages" min="20" max="3000" placeholder="e.g. 304"></label>
+                <label>Days to finish it<input type="number" id="trackDays" min="1" max="365" value="30"></label>
+              </div>
+              <p class="calc" id="trackCalc"></p>
+              <a class="link-small" href="#books">Browse the book library →</a>
+            </div>
+            <button class="btn btn-sun" type="submit">Start / restart streak</button>
+          </form>
+          <button class="btn btn-ghost-dark hidden" id="relapseBtn" type="button">I slipped. Reset my streak</button>
+          <p class="hint">A slip is not the end. Resetting the counter is simply a fresh start.</p>
+        </div>
+
+        <div class="card-box display-box reveal">
+          <div class="tracker-empty" id="trackerEmpty"><div class="big-emoji">🌅</div><p>Your streak will appear here once you start.</p></div>
+          <div class="hidden" id="trackerDisplay">
+            <p class="t-label" id="trackerLabel"></p>
+            <div class="ring-wrap">
+              <svg class="ring-svg" viewBox="0 0 120 120" aria-hidden="true"><circle class="ring-bg" cx="60" cy="60" r="52"/><circle class="ring-fg" id="ringFg" cx="60" cy="60" r="52"/></svg>
+              <div class="ring-center"><strong id="daysDone">0</strong><span>days clean</span></div>
+            </div>
+            <div class="stat-row">
+              <div><strong id="daysLeft">0</strong><span>Days left</span></div>
+              <div><strong id="trackerPercent">0%</strong><span>Complete</span></div>
+              <div><strong id="moneySaved">KES 0</strong><span>Saved</span></div>
+            </div>
+            <div class="bar big"><i id="progressBar"></i></div>
+            <p class="t-msg" id="trackerMessage"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-box reading-card hidden reveal" id="readingCard">
+        <div class="read-head">
+          <div class="book-mini" id="readCover"></div>
+          <div><p class="eyebrow-s">Daily reading</p><h3 id="readBookTitle"></h3><p class="hint" id="readMeta"></p></div>
+          <span class="chip-status" id="readStatus"></span>
+        </div>
+        <div class="bar big"><i id="readProgressBar"></i></div>
+        <p class="hint" id="readProgressText"></p>
+
+        <form id="readForm" class="stack hidden">
+          <label>Which day are you checking in?<select id="readDaySel"></select></label>
+          <div class="read-assign" id="readAssign"></div>
+          <label class="check"><input type="checkbox" id="readConfirm"> <span id="readConfirmText">I read these pages.</span></label>
+          <label>What did you learn? (at least 15 words)<textarea id="readNote" rows="3" maxlength="800" placeholder="Write a few sentences about the pages you read..."></textarea></label>
+          <div class="word-meter"><i id="readMeter"></i></div>
+          <p class="hint" id="readWords">0 / 15 words</p>
+          <button class="btn btn-teal" id="readSubmit" type="submit" disabled>Check in my reading</button>
+        </form>
+        <div class="info-ok hidden" id="readInfo"></div>
+
+        <div class="hidden" id="nextBookBox">
+          <h4>📚 Choose your next book</h4>
+          <p class="hint">Your book plan has ended. Pick another book to keep your days counting.</p>
+          <form id="nextBookForm" class="stack">
+            <label>Book<select id="nextBook"></select></label>
+            <div class="two"><label>Pages in my copy<input type="number" id="nextPages" min="20" max="3000"></label><label>Days to finish it<input type="number" id="nextDays" min="1" max="365" value="14"></label></div>
+            <p class="calc" id="nextCalc"></p>
+            <button class="btn btn-sun" type="submit">Start this book</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="milestones reveal"><h3>Milestones</h3><div class="badge-row" id="milestones"></div></div>
+
+      <div class="extras">
+        <div class="card-box reveal"><h3>🎯 My reasons</h3><p class="hint">Write why you are doing this. Read it on hard days.</p>
+          <form id="reasonForm" class="inline-form"><input type="text" id="reasonText" placeholder="e.g. To be present for my family" maxlength="140" required><button class="btn btn-sun small" type="submit">Add</button></form>
+          <ul class="list" id="reasonList"></ul></div>
+        <div class="card-box reveal"><h3>🌞 Daily pledge</h3><p class="hint">Each morning, promise yourself one more clean day.</p>
+          <button class="btn btn-teal" id="pledgeBtn" type="button">I pledge for today</button><p class="pledge-count" id="pledgeCount">0 pledges so far</p></div>
+        <div class="card-box wide reveal"><h3>📓 Private journal</h3><p class="hint">Entries stay on this device only.</p>
+          <form id="journalForm" class="stack">
+            <div class="mood-row" role="radiogroup" aria-label="Mood">
+              <label><input type="radio" name="mood" value="😀" checked><span>😀</span></label><label><input type="radio" name="mood" value="🙂"><span>🙂</span></label>
+              <label><input type="radio" name="mood" value="😐"><span>😐</span></label><label><input type="radio" name="mood" value="😟"><span>😟</span></label>
+              <label><input type="radio" name="mood" value="😢"><span>😢</span></label>
+            </div>
+            <textarea id="journalText" rows="3" maxlength="600" placeholder="How are you feeling today? What helped?" required></textarea>
+            <button class="btn btn-sun" type="submit">Save entry</button>
+          </form>
+          <ul class="journal-list" id="journalList"></ul></div>
+      </div>
+    </div>
+  </section>
+  </main>
+  </div>
+  <div class="view" id="view-counselors" data-view="counselors">
+  <main>
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="crumbs"><a href="#home">Home</a> › <span>Our counselors</span></div>
+      <h1>Our counselors</h1>
+      <p>Choose the counselor who suits you. Search by name or specialty, select them, then start a private chat once you have unlocked access.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div>
+        <div class="explorer-tools left"><label class="search-box"><span class="sr-only">Search counselors</span><input type="search" id="cSearch" placeholder="🔍  Search by name or specialty"></label></div>
+        <div class="chips" id="cChips"></div>
+        <div class="sel-bar hidden" id="selBar"></div>
+        <div class="counselor-list" id="counselorList"></div>
+      </div>
+    </div>
+  </section>
+  </main>
+  </div>
+  <div class="view" id="view-chat" data-view="chat">
+  <main>
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="crumbs"><a href="#home">Home</a> › <span>One-on-one chat</span></div>
+      <h1>One-on-one chat</h1>
+      <p>A private space between a patient and a counselor.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="chat-box reveal">
+        <div class="chat-locked" id="chatLocked"><div class="lock">🔒</div><p>Chat is locked. <a href="#pricing">Pay KES 130</a> to unlock counselor access.</p></div>
+        <div class="hidden" id="chatArea">
+          <div class="chat-top">
+            <label>Chat with<select id="chatCounselor"></select></label>
+            <label>I am the<select id="chatRole"><option value="patient">Patient</option><option value="counselor">Counselor</option></select></label>
+          </div>
+          <div class="chat-messages" id="chatMessages" aria-live="polite"></div>
+          <form id="chatForm" class="chat-input"><input type="text" id="chatText" placeholder="Type your message..." autocomplete="off" required><button class="btn btn-sun" type="submit">Send</button></form>
+        </div>
+      </div>
+    </div>
+  </section>
+  </main>
+  </div>
+  <div class="view" id="view-pricing" data-view="pricing">
+  <main>
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="crumbs"><a href="#home">Home</a> › <span>Pricing</span></div>
+      <h1>Pricing</h1>
+      <p>One small fee opens private chat with every counselor. The tracker, books, guides and self-check are always free.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="pay-banner hidden" id="payBanner"></div>
+      <div class="pay-layout">
+        <div class="card-box reveal">
+          <h3>Choose how to pay</h3>
+          <p class="hint">Six options. Pick the one that suits you.</p>
+          <div class="pm-grid" id="payMethods"></div>
+          <div class="pay-panel" id="payPanel"></div>
+        </div>
+        <aside class="pay-card summary reveal">
+          <p class="pay-eyebrow">Order summary</p>
+          <h3>Counselor access</h3>
+          <div class="sum-row"><span>Counselor access</span><span>KES 130</span></div>
+          <div class="sum-row"><span>Pay with</span><b id="sumMethod">M-Pesa</b></div>
+          <div class="sum-row total"><span>Total</span><b id="sumTotal">KES 130</b></div>
+          <ul class="ticks"><li>Access to all counselors</li><li>Private one-on-one chat</li><li>Confidential and judgment-free</li></ul>
+          <small class="pay-demo">Demo mode: nobody is charged and card details are never sent. Connect a real gateway before launch (see the notes in script.js and app.py).</small>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap narrow">
+      <header class="sec-head reveal"><span class="eyebrow">FAQ</span><h2>Payment questions</h2></header>
+      <div class="faq reveal">
+        <details><summary>Which payment methods can I use?</summary><p>M-Pesa, Airtel Money, credit or debit card, PayPal, Google Pay and bank transfer.</p></details>
+        <details><summary>How much is it in dollars?</summary><p>KES 130 is about $1 USD. Card, PayPal and Google Pay payments are shown in US dollars.</p></details>
+        <details><summary>Is it a monthly subscription?</summary><p>No. It is a single payment that unlocks counselor access.</p></details>
+        <details><summary>Is my card safe?</summary><p>In this preview card details never leave your browser. When you go live, use your payment gateway's hosted card fields so card numbers never touch your own server.</p></details>
+      </div>
+    </div>
+  </section>
+  </main>
+  </div>
+  <div class="view" id="view-about" data-view="about">
+  <main>
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="crumbs"><a href="#home">Home</a> › <span>About us</span></div>
+      <h1>About us</h1>
+      <p>Addiction Saver brings education, daily reading, progress tracking and caring counselors together in one place.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="about-grid">
+        <article class="about-card reveal"><div class="ai">🎯</div><h3>Our mission</h3><p>Nobody should fight addiction alone. We make it simple to learn, track progress and reach a counselor.</p></article>
+        <article class="about-card reveal"><div class="ai">🔐</div><h3>Private &amp; safe</h3><p>Conversations are one-on-one and judgment-free, so you can speak openly and honestly.</p></article>
+        <article class="about-card reveal"><div class="ai">🌱</div><h3>One day at a time</h3><p>Recovery starts with one day, then another. We help you see every step you take.</p></article>
+      </div>
+    </div>
+  </section>
+  <section class="section alt">
+    <div class="wrap">
+      <header class="sec-head reveal"><span class="eyebrow">The daily reading rule</span><h2>Why you read to track</h2><p>Understanding builds strength. So each day you track is a day you also learned something.</p></header>
+      <ol class="rule-list reveal">
+        <li><b>Pick a book</b> from the library and how many days you want to take to finish it.</li>
+        <li><b>Your pages are split evenly:</b> total pages ÷ days = pages a day (rounded up).</li>
+        <li><b>Read today's pages</b> and check in with a short reflection of at least 15 words.</li>
+        <li><b>The next day unlocks.</b> If you miss a day, your streak pauses until you catch up.</li>
+        <li><b>Finished the book?</b> Choose the next one to keep your days counting.</li>
+      </ol>
+    </div>
+  </section>
+  </main>
+  </div>
+  <div class="view" id="view-contact" data-view="contact">
+  <main>
+  <section class="page-hero">
+    <div class="wrap">
+      <div class="crumbs"><a href="#home">Home</a> › <span>Contact us</span></div>
+      <h1>Contact us</h1>
+      <p>Prefer a call? Leave your details and we will call you back.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="contact-layout">
+        <div class="contact-cards">
+          <div class="c-card c1 reveal"><span>📞</span><div><h3>Phone</h3><p>011 99 77 860</p></div></div>
+          <div class="c-card c2 reveal"><span>✉️</span><div><h3>Email</h3><p><a href="mailto:thuita881@gmail.com">thuita881@gmail.com</a></p></div></div>
+          <div class="c-card c3 reveal"><span>🐦</span><div><h3>Twitter / X</h3><p>@your_handle</p></div></div>
+        </div>
+        <form class="card-box stack reveal" id="callbackForm">
+          <h3>📞 Request a call back</h3>
+          <input type="text" id="cbName" placeholder="Your name" required>
+          <input type="tel" id="cbPhone" placeholder="Phone number" required>
+          <select id="cbTime" aria-label="Best time to call"><option>Morning</option><option>Afternoon</option><option>Evening</option></select>
+          <textarea id="cbMessage" rows="3" placeholder="How can we help? (optional)"></textarea>
+          <label class="check"><input type="checkbox" id="cbConsent" required> <span>I agree to be contacted about my request.</span></label>
+          <button class="btn btn-sun" type="submit">Request call back</button>
+          <p class="pay-note dark" id="cbStatus"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+  </main>
+  </div>
+
+  <footer class="footer">
+    <div class="wrap foot-grid">
+      <div><div class="foot-logo">🔥 Addiction <b>Saver</b></div><p>Recovery support, one day at a time.</p></div>
+      <div><h4>Learn</h4><a href="#addictions">Addictions</a><a href="#counselling">Counselling guide</a><a href="#books">Book library</a><a href="#handbooks">Handbooks</a></div>
+      <div><h4>Support</h4><a href="#tracker">My tracker</a><a href="#counselors">Counselors</a><a href="#chat">Private chat</a><a href="#meetings">Meetings</a><a href="#pricing">Pricing</a></div>
+      <div><h4>Need help now?</h4><p>Emergency: <b>999</b> / <b>112</b></p><a class="btn btn-sun small" href="#contact">Request a call back</a></div>
+    </div>
+    <div class="wrap foot-base"><p>© 2026 Addiction Saver. This site offers education and personal tracking and is not a replacement for emergency or medical care.</p></div>
+  </footer>
+  <button class="to-top" id="toTop" aria-label="Back to top">↑</button>
+  <dialog id="addModal" class="modal"><div class="modal-body" id="addModalBody"></div><button class="modal-close" id="addModalClose" aria-label="Close">✕</button></dialog>
+  <dialog id="bookModal" class="modal"><div id="bookModalBody"></div><button class="modal-close dark" id="bookModalClose" aria-label="Close">✕</button></dialog>
+  <dialog id="hbModal" class="modal"><div id="hbBody"></div><button class="modal-close dark" id="hbClose" aria-label="Close">✕</button></dialog>
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+// ===== Addiction Saver: front end (multi-page) =====
+// One script powers every page. Each part only starts if its page has the needed elements.
+// Two modes, chosen automatically:
+//  1) Python backend running (python app.py)  -> data is saved in the database.
+//  2) Live Server / opening the files          -> data is saved in this browser (localStorage).
+
+const $ = id => document.getElementById(id);
+const bind = (id, ev, fn) => { const el = $(id); if (el) el.addEventListener(ev, fn); return el; };
+const DAY_MS = 86400000;
+const MIN_WORDS = 15;                 // words needed in the daily reading reflection
+const PRICE_KES = 130;
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+let qs = new URLSearchParams((location.hash.split('?')[1]) || '');
+const routeHooks = {};
+
+// ---------------------------------------------------------------
+// Payment settings (see the "Real payments" notes in the pricing section below)
+// ---------------------------------------------------------------
+const PAYMENT_CONFIG = {
+  demo: true,                 // true = nobody is charged. Set false only after a real gateway is connected.
+  paypalClientId: '',         // from developer.paypal.com
+  googlePayMerchantId: '',    // from the Google Pay & Wallet Console
+  cardGateway: ''             // e.g. Stripe, Paystack, Flutterwave or Pesapal (use their hosted card fields)
+};
+
+// ---------------------------------------------------------------
+// Dates and reading-plan maths (pure functions: easy to test)
+// ---------------------------------------------------------------
+const pad = n => String(n).padStart(2, '0');
+const ymd = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const parseYmd = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+const addDays = (s, n) => { const d = parseYmd(s); d.setDate(d.getDate() + n); return ymd(d); };
+const diffDays = (a, b) => Math.round((parseYmd(a) - parseYmd(b)) / DAY_MS);
+const todayStr = () => ymd(new Date());
+const fmtDate = s => parseYmd(s).toLocaleDateString([], { weekday: 'short', day: 'numeric', month: 'short' });
+const countWords = s => ((s || '').trim().match(/\S+/g) || []).length;
+
+// pages / days -> pages per day (rounded up) and the real number of days needed
+function planMath(pages, days) {
+  pages = Math.max(1, Math.floor(Number(pages) || 1));
+  days = Math.max(1, Math.floor(Number(days) || 1));
+  const ppd = Math.ceil(pages / days);
+  return { pages, ppd, days: Math.ceil(pages / ppd), askedDays: days };
+}
+
+// which pages are assigned on a calendar date? (latest plan that covers the date wins)
+function assignmentFor(plan, date) {
+  const j = diffDays(date, plan.start_date) + 1;
+  if (j < 1 || j > plan.days) return null;
+  return { plan, dayIdx: j, from: (j - 1) * plan.ppd + 1, to: Math.min(plan.pages, j * plan.ppd) };
+}
+function assignmentForDate(plans, date) {
+  for (let i = plans.length - 1; i >= 0; i--) {
+    const a = assignmentFor(plans[i], date);
+    if (a) return a;
+  }
+  return null;
+}
+
+// The reading gate. A day only counts once its reading was checked in.
+// "done" = number of past days, in a row from the streak start, whose reading is complete.
+function computeProgress(tracker, plans, checkins, today) {
+  const read = new Set(checkins.map(c => c.date));
+  const S = ymd(new Date(tracker.start_ts));
+  let done = 0, blocked = null;
+  for (let i = 0; i < 4000; i++) {
+    const d = addDays(S, i);
+    if (d >= today) break;
+    if (read.has(d)) done++; else { blocked = d; break; }
+  }
+  const missing = [];
+  for (let i = 0; i < 4000; i++) {
+    const d = addDays(S, i);
+    if (d >= today) break;
+    if (!read.has(d) && assignmentForDate(plans, d)) missing.push(d);
+  }
+  const todayAssign = assignmentForDate(plans, today);
+  const needsBook = !!blocked && !assignmentForDate(plans, blocked);
+  return {
+    start: S, done, blocked, missing, needsBook,
+    gapStart: needsBook ? blocked : null,
+    todayAssign, todayRead: read.has(today)
+  };
+}
+
+// ---------------------------------------------------------------
+// Storage + API (Python first, browser fallback)
+// ---------------------------------------------------------------
+function getClientId() {
+  let id = null;
+  try { id = localStorage.getItem('clientId'); } catch { /* storage blocked */ }
+  if (!id) {
+    id = (crypto.randomUUID && crypto.randomUUID()) || String(Date.now()) + Math.random().toString(16).slice(2);
+    try { localStorage.setItem('clientId', id); } catch { /* ignore */ }
+  }
+  return id;
+}
+
+const ls = {
+  get(k, f) { try { const v = JSON.parse(localStorage.getItem('as_' + k)); return v === null || v === undefined ? f : v; } catch { return f; } },
+  set(k, v) { try { localStorage.setItem('as_' + k, JSON.stringify(v)); } catch { /* ignore */ } }
+};
+
+const PAY_IDS = ['mpesa', 'airtel', 'card', 'paypal', 'googlepay', 'bank'];
+const DATE_OK = s => /^\d{4}-\d{2}-\d{2}$/.test(String(s || ''));
+
+function localApi(path, method, body) {
+  const [route, query] = path.split('?');
+  const params = new URLSearchParams(query || '');
+  const fail = msg => { throw new Error(msg); };
+
+  if (route === '/counselors' && method === 'GET') return ls.get('counselors', []);
+  if (route === '/counselors' && method === 'POST') {
+    if (!body.name?.trim() || !body.specialty?.trim()) fail('Name and specialty are required');
+    const list = ls.get('counselors', []);
+    list.push({ id: Date.now() + list.length, name: body.name.trim(), specialty: body.specialty.trim(), email: body.email || '', bio: body.bio || '' });
+    ls.set('counselors', list);
+    return { ok: true };
+  }
+  if (route.startsWith('/counselors/') && method === 'DELETE') {
+    const id = Number(route.split('/')[2]);
+    ls.set('counselors', ls.get('counselors', []).filter(c => c.id !== id));
+    return { ok: true };
+  }
+  if (route === '/tracker' && method === 'GET') return ls.get('tracker', null);
+  if (route === '/tracker' && method === 'POST') {
+    ls.set('tracker', { addiction: body.addiction, goal: Math.max(1, Math.min(3650, parseInt(body.goal, 10) || 30)), start_ts: Date.now() });
+    return { ok: true };
+  }
+  if (route === '/tracker/reset') {
+    const t = ls.get('tracker', null);
+    if (t) { t.start_ts = Date.now(); ls.set('tracker', t); }
+    return { ok: true };
+  }
+  if (route === '/reading' && method === 'GET') return ls.get('reading', { plans: [], checkins: [] });
+  if (route === '/reading/plan' && method === 'POST') {
+    const pages = Math.floor(Number(body.pages)), days = Math.floor(Number(body.days));
+    if (!body.book_id || !(pages >= 20 && pages <= 3000) || !(days >= 1 && days <= 365) || !DATE_OK(body.start_date)) fail('Please choose a book, its pages and the number of days');
+    const m = planMath(pages, days);
+    const r = ls.get('reading', { plans: [], checkins: [] });
+    r.plans.push({ book_id: body.book_id, pages: m.pages, days: m.days, ppd: m.ppd, start_date: body.start_date });
+    ls.set('reading', r);
+    return { ok: true, ppd: m.ppd, days: m.days };
+  }
+  if (route === '/reading/checkin' && method === 'POST') {
+    const r = ls.get('reading', { plans: [], checkins: [] });
+    if (!DATE_OK(body.date)) fail('Invalid date');
+    const a = assignmentForDate(r.plans, body.date);
+    if (!a) fail('No reading is assigned for that day');
+    if (countWords(body.note) < MIN_WORDS) fail(`Please write at least ${MIN_WORDS} words about what you read`);
+    r.checkins = r.checkins.filter(c => c.date !== body.date);
+    r.checkins.push({ date: body.date, book_id: a.plan.book_id, from: a.from, to: a.to, note: String(body.note).trim(), created: Date.now() / 1000 });
+    ls.set('reading', r);
+    return { ok: true };
+  }
+  if (route === '/payment/status') return { paid: ls.get('paid', false), method: ls.get('payMethod', ''), price_kes: PRICE_KES };
+  if (route === '/pay' && method === 'POST') {
+    if (!PAY_IDS.includes(body.method)) fail('Please choose a payment method');
+    if ((body.method === 'mpesa' || body.method === 'airtel') && String(body.phone || '').replace(/\D/g, '').length < 9) fail('Enter a valid phone number');
+    ls.set('paid', true); ls.set('payMethod', body.method);          // DEMO ONLY: no real charge
+    return { paid: true, method: body.method };
+  }
+  if (route === '/messages' && method === 'GET') {
+    if (!ls.get('paid', false)) fail('Payment required');
+    return ls.get('messages', {})[params.get('counselor_id')] || [];
+  }
+  if (route === '/messages' && method === 'POST') {
+    if (!ls.get('paid', false)) fail('Payment required');
+    const all = ls.get('messages', {});
+    (all[body.counselor_id] = all[body.counselor_id] || []).push({ role: body.role, text: String(body.text).trim(), created: Date.now() / 1000 });
+    ls.set('messages', all);
+    return { ok: true };
+  }
+  if (route === '/callback' && method === 'POST') {
+    if (!body.name?.trim() || !body.phone?.trim()) fail('Name and phone are required');
+    const list = ls.get('callbacks', []);
+    list.push({ ...body, created: Date.now() / 1000 });
+    ls.set('callbacks', list);
+    return { ok: true };
+  }
+  if (route === '/meetings' && method === 'GET') return [];
+  if (route === '/meetings/rsvp' && method === 'GET') return { ids: ls.get('rsvp', []) };
+  if (route === '/meetings/rsvp' && method === 'POST') {
+    const id = String(body.meeting_id || '');
+    if (!/^[a-z0-9-]{1,40}$/.test(id)) fail('Unknown meeting');
+    const ids = ls.get('rsvp', []).filter(x => x !== id);
+    if (body.going) ids.push(id);
+    ls.set('rsvp', ids);
+    return { ok: true, ids };
+  }
+  fail('Unknown route');
+}
+
+let backendOnline = null;
+let modeNoticeShown = false;
+
+function toast(msg, ms = 3200) {
+  const t = $('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => t.classList.remove('show'), ms);
+}
+
+function noteLocalMode() {
+  if (modeNoticeShown) return;
+  modeNoticeShown = true;
+  toast('Preview mode: your data is saved in this browser only.', 5000);
+}
+
+async function api(path, method = 'GET', body = null) {
+  if (backendOnline !== false) {
+    try {
+      const res = await fetch('/api' + path, {
+        method,
+        headers: { 'Content-Type': 'application/json', 'X-Client-Id': getClientId() },
+        body: body ? JSON.stringify(body) : null
+      });
+      const isJson = (res.headers.get('content-type') || '').includes('application/json');
+      if (isJson) {
+        backendOnline = true;
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Request failed');
+        return data;
+      }
+      backendOnline = false;                    // Live Server answered with HTML: no Python backend
+    } catch (err) {
+      if (backendOnline === true) throw err;    // a real error from the backend
+      backendOnline = false;                    // network error: no backend
+    }
+  }
+  noteLocalMode();
+  return localApi(path, method, body || {});
+}
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+function confetti() {
+  const colors = ['#fbbf24', '#f97362', '#0ea5a4', '#4338ca', '#ec4899', '#22c55e'];
+  const box = document.createElement('div');
+  box.className = 'confetti';
+  for (let i = 0; i < 70; i++) {
+    const s = document.createElement('i');
+    s.style.left = Math.random() * 100 + 'vw';
+    s.style.background = colors[i % colors.length];
+    s.style.animationDelay = (Math.random() * 0.5) + 's';
+    s.style.animationDuration = (1.6 + Math.random() * 1.2) + 's';
+    box.appendChild(s);
+  }
+  document.body.appendChild(box);
+  setTimeout(() => box.remove(), 3200);
+}
+
+// ---------------------------------------------------------------
+// Page chrome: menu, dropdowns, progress bar, reveal, page fade
+// ---------------------------------------------------------------
+function initChrome() {
+  const nav = $('navLinks');
+  bind('menuToggle', 'click', () => {
+    const open = nav.classList.toggle('open');
+    $('menuToggle').setAttribute('aria-expanded', String(open));
+  });
+
+  document.querySelectorAll('.dd-btn').forEach(btn => btn.addEventListener('click', e => {
+    e.stopPropagation();
+    const dd = btn.parentElement;
+    const willOpen = !dd.classList.contains('open');
+    document.querySelectorAll('.dd.open').forEach(x => { x.classList.remove('open'); x.firstElementChild.setAttribute('aria-expanded', 'false'); });
+    if (willOpen) { dd.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); }
+  }));
+  document.addEventListener('click', () => document.querySelectorAll('.dd.open').forEach(x => x.classList.remove('open')));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.dd.open').forEach(x => x.classList.remove('open')); });
+
+  const onScroll = () => {
+    const h = document.documentElement;
+    const max = h.scrollHeight - h.clientHeight;
+    const bar = $('scrollProgress'); if (bar) bar.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
+    const nb = $('navbar'); if (nb) nb.classList.toggle('scrolled', h.scrollTop > 10);
+    const tt = $('toTop'); if (tt) tt.classList.toggle('show', h.scrollTop > 600);
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  bind('toTop', 'click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  onScroll();
+
+  const els = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    els.forEach(el => obs.observe(el));
+  } else els.forEach(el => el.classList.add('in'));
+
+  // count-up numbers
+  document.querySelectorAll('[data-count]').forEach(el => {
+    const target = Number(el.dataset.count);
+    if (!('IntersectionObserver' in window)) { el.textContent = target; return; }
+    const o = new IntersectionObserver(es => {
+      if (!es[0].isIntersecting) return;
+      o.disconnect();
+      const t0 = performance.now();
+      const step = t => { const p = Math.min(1, (t - t0) / 1200); el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(step); };
+      requestAnimationFrame(step);
+    }, { threshold: 0.4 });
+    o.observe(el);
+  });
+
+}
+
+// ---------------------------------------------------------------
+// Addictions page
+// ---------------------------------------------------------------
+const addictions = [
+  { icon: '🍺', name: 'Alcohol', cat: 'substance', color: 'linear-gradient(135deg,#f59e0b,#ea580c)',
+    short: 'Drinking that keeps going despite harm to health, work or relationships.',
+    overview: 'Alcohol use becomes a problem when drinking feels necessary and is hard to control, even when it causes harm.',
+    signs: ['Cravings and drinking more than planned', 'Needing more to feel the same effect', 'Shakiness, sweating or poor sleep when you stop'],
+    help: 'Counselling explores what drives the drinking, builds coping skills for urges and plans for high-risk situations. Heavy daily drinkers should get medical advice before stopping suddenly, because withdrawal can be dangerous.',
+    step: 'Note when and why you drink for one week, then share it with a counselor.' },
+  { icon: '🚬', name: 'Nicotine & Smoking', cat: 'substance', color: 'linear-gradient(135deg,#64748b,#334155)',
+    short: 'Dependence on cigarettes, vaping or tobacco.',
+    overview: 'Nicotine is highly habit-forming. Urges are tied to routines like after meals, stress and social settings.',
+    signs: ['Reaching for a smoke first thing in the morning', 'Irritability or poor focus when you go without', 'Failed attempts to quit'],
+    help: 'Counselling helps you break the routines around smoking and plan for cravings, which usually pass within minutes.',
+    step: 'Pick a quit date and remove cigarettes or vapes from your space.' },
+  { icon: '🌿', name: 'Cannabis', cat: 'substance', color: 'linear-gradient(135deg,#22c55e,#166534)',
+    short: 'Regular use that affects motivation, mood, memory or responsibilities.',
+    overview: 'Many people use cannabis to relax or sleep, and over time it can become a daily need that crowds out other things.',
+    signs: ['Using daily or first thing in the day', 'Less interest in study, work or hobbies', 'Trouble sleeping or low mood when stopping'],
+    help: 'Counsellors help you find other ways to cope with stress and sleep, and support you through the first few uncomfortable weeks.',
+    step: 'Track how many days a week you use, without judging yourself.' },
+  { icon: '💊', name: 'Drugs & Prescription Pills', cat: 'substance', color: 'linear-gradient(135deg,#ef4444,#be123c)',
+    short: 'Misuse of opioids, sedatives, stimulants or other drugs.',
+    overview: 'This includes street drugs and medicines used in ways not prescribed. Some are dangerous to stop without medical help.',
+    signs: ['Taking more or more often than prescribed', 'Hiding use or running out early', 'Neglecting duties because of use'],
+    help: 'A doctor can guide safe withdrawal while counselling supports the thinking and habits behind use. Never stop certain medicines suddenly on your own.',
+    step: 'Speak to a doctor or pharmacist about safe next steps, and tell a counselor.' },
+  { icon: '🍃', name: 'Khat (Miraa), Kratom & Herbal Stimulants', cat: 'substance', color: 'linear-gradient(135deg,#84cc16,#3f6212)',
+    short: 'Daily reliance on plant-based stimulants.',
+    overview: 'Chewing or brewing stimulant plants can feel harmless, yet heavy daily use can affect sleep, appetite, mood and money.',
+    signs: ['Needing it to start the day or stay alert', 'Poor sleep and loss of appetite', 'Spending more than you can afford'],
+    help: 'Counselling helps you replace the routine, rebuild sleep and manage the low mood that can follow.',
+    step: 'Work out how much you spend each week and set a smaller limit.' },
+  { icon: '🎰', name: 'Gambling & Betting', cat: 'behaviour', color: 'linear-gradient(135deg,#16a34a,#14532d)',
+    short: 'Betting on games, slots or sports despite mounting losses.',
+    overview: 'Gambling can feel exciting, but chasing losses can quickly lead to debt, secrecy and stress.',
+    signs: ['Betting more to win back losses', 'Lying about money or time spent betting', 'Borrowing to gamble'],
+    help: 'Counselling targets the urge to chase, builds money boundaries and supports you in telling people who can help.',
+    step: 'Block betting apps and hand control of your money to someone you trust for now.' },
+  { icon: '🛍️', name: 'Shopping & Spending', cat: 'behaviour', color: 'linear-gradient(135deg,#14b8a6,#0f766e)',
+    short: 'Compulsive buying for a quick emotional lift.',
+    overview: 'Buying can become a way to escape stress or sadness, followed by guilt and money worries.',
+    signs: ['Hiding purchases', 'Buying to feel better, then regretting it', 'Debt that keeps growing'],
+    help: 'Counselling looks at the feelings behind buying and builds a pause-and-plan habit before spending.',
+    step: 'Wait 48 hours before any non-essential purchase.' },
+  { icon: '🍔', name: 'Food & Binge Eating', cat: 'behaviour', color: 'linear-gradient(135deg,#fb923c,#dc2626)',
+    short: 'Eating to cope with feelings, with loss of control.',
+    overview: 'Binge eating is often tied to emotions and stress rather than hunger, and it brings shame that keeps the cycle going.',
+    signs: ['Eating very fast or in secret', 'Feeling out of control while eating', 'Guilt and shame afterwards'],
+    help: 'Counselling treats shame first, then works on regular eating and healthier ways to handle feelings. A doctor or dietitian can add support.',
+    step: 'Be kind to yourself and tell one trusted person or a counselor.' },
+  { icon: '💼', name: 'Work Addiction', cat: 'behaviour', color: 'linear-gradient(135deg,#38bdf8,#0369a1)',
+    short: 'Being unable to switch off, at the cost of health and family.',
+    overview: 'Work can become a way to avoid feelings or prove worth, until rest feels like failure.',
+    signs: ['Working through meals, sleep and holidays', 'Guilt when you relax', 'Strained relationships'],
+    help: 'Counselling explores the fear behind overwork and builds boundaries and real rest.',
+    step: 'Schedule one phone-free evening this week and protect it.' },
+  { icon: '🔞', name: 'Pornography', cat: 'intimacy', color: 'linear-gradient(135deg,#a855f7,#6d28d9)',
+    short: 'Compulsive viewing that disrupts mood, focus and relationships.',
+    overview: 'Pornography use becomes a concern when it feels out of control, grows more extreme, or causes shame and harm to daily life.',
+    signs: ['Viewing for longer or more often than intended', 'Using it to escape stress or loneliness', 'Shame, secrecy and trouble with real intimacy'],
+    help: 'Counselling is private and without judgment. It helps you spot triggers, build new habits and rebuild trust with yourself and others.',
+    step: 'Add content filters on your devices and move your phone out of the bedroom at night.' },
+  { icon: '🧠', name: 'Compulsive Masturbation', cat: 'intimacy', color: 'linear-gradient(135deg,#ec4899,#be185d)',
+    short: 'Hard-to-control urges that interfere with study, work or relationships.',
+    overview: 'Masturbation is common and normal. It becomes a concern when it feels compulsive, is used to escape stress, or gets in the way of daily life despite wanting to cut down.',
+    signs: ['Repeated failed attempts to cut down', 'Using it to cope with stress or boredom', 'Guilt that affects mood and focus'],
+    help: 'A counselor can help you understand your triggers without shame, manage urges and build healthier routines for stress and sleep.',
+    step: 'Notice your triggers, such as late nights, boredom or stress, and plan one alternative activity for each.' },
+  { icon: '💞', name: 'Sex & Love Addiction', cat: 'intimacy', color: 'linear-gradient(135deg,#fb7185,#e11d48)',
+    short: 'Compulsive sexual behaviour or unhealthy dependence on relationships.',
+    overview: 'This can show up as risky sexual behaviour or clinging to relationships to avoid feeling alone.',
+    signs: ['Risky behaviour you regret', 'Feeling empty when not in a relationship', 'Unable to stop despite consequences'],
+    help: 'Counselling works on self-worth, boundaries and safer, more honest relationships.',
+    step: 'Write down the pattern you want to change, and bring it to your first session.' },
+  { icon: '🎮', name: 'Gaming', cat: 'digital', color: 'linear-gradient(135deg,#3b82f6,#1d4ed8)',
+    short: 'Gaming that replaces sleep, studies and real-life connection.',
+    overview: 'Games are designed to keep you playing. It becomes a problem when you cannot stop and other parts of life suffer.',
+    signs: ['Losing track of time and sleep', 'Irritable when you cannot play', 'Dropping school, work or friends'],
+    help: 'Counselling helps set limits, find other sources of achievement and reconnect with people.',
+    step: 'Set a daily play limit and use a timer, not your own judgment in the moment.' },
+  { icon: '📱', name: 'Social Media & Phone', cat: 'digital', color: 'linear-gradient(135deg,#06b6d4,#0e7490)',
+    short: 'Constant scrolling and checking that hurts focus and mood.',
+    overview: 'Apps are built to hold your attention, and endless comparing can lower mood and sleep quality.',
+    signs: ['Checking your phone without thinking', 'Anxiety when it is out of reach', 'Scrolling late into the night'],
+    help: 'Counselling builds awareness of why you scroll and replaces it with more satisfying habits.',
+    step: 'Turn off non-essential notifications and charge your phone outside the bedroom.' },
+  { icon: '🌐', name: 'Internet & Streaming', cat: 'digital', color: 'linear-gradient(135deg,#8b5cf6,#4f46e5)',
+    short: 'Endless browsing and binge-watching that crowds out real life.',
+    overview: 'Auto-play and endless feeds make it easy to lose hours, leaving you tired and behind on things that matter.',
+    signs: ['Staying up for just one more episode', 'Missed deadlines', 'Feeling drained after screen time'],
+    help: 'Counselling helps set routines and find offline activities you enjoy.',
+    step: 'Turn off auto-play and pick a fixed stop time each night.' },
+  { icon: '🩹', name: 'Self-Harm Urges', cat: 'behaviour', color: 'linear-gradient(135deg,#f43f5e,#9f1239)',
+    short: 'Using pain to cope with overwhelming feelings. This needs gentle, professional care.',
+    overview: 'Self-harm is not an addiction as such, but it is a way of coping that can feel hard to stop. You deserve care, not judgment.',
+    signs: ['Hiding marks or injuries', 'Urges when feelings become too big', 'Shame and secrecy'],
+    help: 'A counselor can help you find safer ways to cope and work on what lies underneath. If you are in danger right now, call 999 or 112.',
+    step: 'Tell one trusted person or a counselor how you are feeling today.' }
+];
+
+function initAddictions() {
+  if (!$('addictionCards')) return;
+  const state = { cat: 'all', q: '' };
+  const render = () => {
+    const q = state.q.trim().toLowerCase();
+    const list = addictions.filter(a =>
+      (state.cat === 'all' || a.cat === state.cat) &&
+      (!q || (a.name + ' ' + a.short + ' ' + a.overview).toLowerCase().includes(q)));
+    $('addictionCards').innerHTML = list.map(a => `
+      <button class="add-card" data-name="${esc(a.name)}" style="background:${a.color}" aria-label="Read about ${esc(a.name)}">
+        <div class="ic">${a.icon}</div><h3>${esc(a.name)}</h3><p>${esc(a.short)}</p><span class="more">Read more →</span>
+      </button>`).join('');
+    $('addEmpty').classList.toggle('hidden', list.length > 0);
+  };
+  bind('addSearch', 'input', e => { state.q = e.target.value; render(); });
+  bind('addChips', 'click', e => {
+    const chip = e.target.closest('.chip'); if (!chip) return;
+    document.querySelectorAll('#addChips .chip').forEach(c => c.classList.toggle('active', c === chip));
+    state.cat = chip.dataset.cat; render();
+  });
+
+  const modal = $('addModal');
+  const close = () => { if (modal.close) modal.close(); else modal.removeAttribute('open'); };
+  $('addictionCards').addEventListener('click', e => {
+    const card = e.target.closest('.add-card'); if (!card) return;
+    const a = addictions.find(x => x.name === card.dataset.name); if (!a) return;
+    $('addModalBody').innerHTML = `
+      <div class="modal-head" style="background:${a.color}"><div class="ic">${a.icon}</div><h3>${esc(a.name)}</h3></div>
+      <div class="modal-main">
+        <h4>What it is</h4><p>${esc(a.overview)}</p>
+        <h4>Common signs</h4><ul>${a.signs.map(s => `<li>${esc(s)}</li>`).join('')}</ul>
+        <h4>How counselling helps</h4><p>${esc(a.help)}</p>
+        <h4>A first step you can take today</h4><p>${esc(a.step)}</p>
+        <div class="modal-actions">
+          <a class="btn btn-sun" href="#tracker?addiction=${encodeURIComponent(a.name)}">Track this</a>
+          <a class="btn btn-teal" href="#books?topic=${esc(a.cat)}">Read a book on it</a>
+          <a class="btn btn-ghost-dark" href="#counselors">Find a counselor</a>
+        </div>
+      </div>`;
+    if (modal.showModal) modal.showModal(); else modal.setAttribute('open', '');
+  });
+  bind('addModalClose', 'click', close);
+  modal.addEventListener('click', e => { if (e.target === modal) close(); });
+  render();
+}
+
+// ---------------------------------------------------------------
+// Counselling guide page: tabs + self-check + FAQ
+// ---------------------------------------------------------------
+function initGuide() {
+  if (!$('guideTabs')) return;
+  $('guideTabs').addEventListener('click', e => {
+    const tab = e.target.closest('.tab'); if (!tab) return;
+    document.querySelectorAll('#guideTabs .tab').forEach(t => t.classList.toggle('active', t === tab));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === 'tab-' + tab.dataset.tab));
+  });
+  const quiz = [
+    'Have you tried to cut down or stop and found you could not?',
+    'Do you use more, or for longer, than you meant to?',
+    'Do cravings or urges take up a lot of your thinking?',
+    'Has it caused problems with family, friends or a partner?',
+    'Have you neglected study, work or responsibilities because of it?',
+    'Do you hide it, or lie about how much you do it?',
+    'Do you feel guilt or shame afterwards?',
+    'Do you keep going even when it harms your health, money or mood?',
+    'Do you feel restless, anxious or unwell when you stop?',
+    'Do you use it to cope with stress, loneliness or difficult feelings?'
+  ];
+  $('quizQuestions').innerHTML = quiz.map((q, i) => `
+    <div class="q-item"><p>${i + 1}. ${esc(q)}</p>
+      <div class="yn">
+        <label><input type="radio" name="q${i}" value="1"><span>Yes</span></label>
+        <label><input type="radio" name="q${i}" value="0"><span>No</span></label>
+      </div></div>`).join('');
+  bind('quizForm', 'submit', e => {
+    e.preventDefault();
+    let yes = 0, answered = 0;
+    quiz.forEach((_, i) => { const p = document.querySelector(`input[name="q${i}"]:checked`); if (p) { answered++; yes += Number(p.value); } });
+    const box = $('quizResult');
+    box.classList.remove('hidden');
+    if (answered < quiz.length) { box.className = 'quiz-result mid'; box.innerHTML = `<h4>Almost there</h4><p>Please answer all ${quiz.length} questions. You answered ${answered}.</p>`; return; }
+    let level, title, text;
+    if (yes <= 2) { level = 'low'; title = 'Fewer signs right now'; text = 'Your answers suggest few warning signs. If something still worries you, talking to a counselor is always okay.'; }
+    else if (yes <= 5) { level = 'mid'; title = 'Some warning signs'; text = 'You may be struggling more than you would like. Starting a tracker and talking to a counselor could help you get ahead of it.'; }
+    else { level = 'high'; title = 'Many warning signs'; text = 'Your answers show several signs that this is affecting your life. Support works, and reaching out to a counselor is a strong next step.'; }
+    box.className = 'quiz-result ' + level;
+    box.innerHTML = `<h4>${title} (${yes} of ${quiz.length})</h4><p>${text}</p>
+      <p><small>This is not a diagnosis. Only a qualified professional can assess you.</small></p>
+      <a class="btn btn-sun" href="#counselors">Find a counselor</a>`;
+    if (box.scrollIntoView) box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+}
+
+// ---------------------------------------------------------------
+// Book library (10 reference books)
+// ---------------------------------------------------------------
+const BOOKS = [
+  { id: 'dopamine-nation', title: 'Dopamine Nation', sub: 'Finding Balance in the Age of Indulgence', author: 'Anna Lembke', year: 2021, pages: 304,
+    cats: ['mind', 'digital', 'substance'], color: 'linear-gradient(160deg,#4338ca,#ec4899)',
+    blurb: 'A Stanford psychiatrist explains the brain\'s pleasure and pain balance, and why modern life makes compulsive overconsumption so easy. Includes patient stories and practical ways to reset.',
+    good: 'Anyone hooked on screens, sugar, porn, gambling or substances.' },
+  { id: 'hungry-ghosts', title: 'In the Realm of Hungry Ghosts', sub: 'Close Encounters with Addiction', author: 'Gabor Maté', year: 2008, pages: 496,
+    cats: ['mind', 'substance'], color: 'linear-gradient(160deg,#0f766e,#0ea5a4)',
+    blurb: 'A physician draws on years of work with people with severe addiction to argue that addiction grows out of emotional pain and early experience, and that compassion works better than punishment.',
+    good: 'People who want to understand the roots of addiction, and families.' },
+  { id: 'unbroken-brain', title: 'Unbroken Brain', sub: 'A Revolutionary New Way of Understanding Addiction', author: 'Maia Szalavitz', year: 2016, pages: 320,
+    cats: ['mind'], color: 'linear-gradient(160deg,#0369a1,#38bdf8)',
+    blurb: 'Argues that addiction is better understood as a problem of learning and development than as a simple brain disease, and that people recover through connection, suitable treatment and time.',
+    good: 'Readers who want a fresh, humane way to think about addiction.' },
+  { id: 'craving-mind', title: 'The Craving Mind', sub: 'From Cigarettes to Smartphones to Love', author: 'Judson Brewer', year: 2017, pages: 256,
+    cats: ['mind', 'digital', 'substance'], color: 'linear-gradient(160deg,#7c3aed,#a78bfa)',
+    blurb: 'A neuroscientist and psychiatrist explains how habit loops form around cigarettes, food, phones and relationships, and how mindfulness can loosen craving\'s grip.',
+    good: 'Anyone who wants practical mindfulness tools for urges.' },
+  { id: 'never-enough', title: 'Never Enough', sub: 'The Neuroscience and Experience of Addiction', author: 'Judith Grisel', year: 2019, pages: 256,
+    cats: ['mind', 'substance'], color: 'linear-gradient(160deg,#be123c,#fb7185)',
+    blurb: 'A behavioural neuroscientist who lived through addiction herself explains in plain language what drugs do to the brain and why quitting is so hard.',
+    good: 'Readers who like clear science mixed with a personal story.' },
+  { id: 'irresistible', title: 'Irresistible', sub: 'The Rise of Addictive Technology and the Business of Keeping Us Hooked', author: 'Adam Alter', year: 2017, pages: 368,
+    cats: ['digital', 'behaviour'], color: 'linear-gradient(160deg,#0e7490,#22d3ee)',
+    blurb: 'Looks at how apps, games and feeds are designed to hook us, and how behavioural addictions work and can be resisted.',
+    good: 'Gamers, heavy phone users and anyone stuck online.' },
+  { id: 'your-brain-on-porn', title: 'Your Brain on Porn', sub: 'Internet Pornography and the Emerging Science of Addiction', author: 'Gary Wilson', year: 2014, pages: 180,
+    cats: ['intimacy', 'digital'], color: 'linear-gradient(160deg,#9d174d,#f472b6)',
+    blurb: 'A popular and much-discussed book on internet pornography and the brain. Some of its claims are debated by researchers, so read it critically and talk it through with a counselor.',
+    good: 'People who want to understand and change their pornography use.',
+    note: 'Page count differs by edition.' },
+  { id: 'out-of-the-shadows', title: 'Out of the Shadows', sub: 'Understanding Sexual Addiction', author: 'Patrick Carnes', year: 2001, pages: 219,
+    cats: ['intimacy', 'behaviour'], color: 'linear-gradient(160deg,#6b21a8,#c084fc)',
+    blurb: 'A well-known early book on compulsive sexual behaviour and the recovery process, by the clinician who popularised the term. The idea of sex addiction is still debated in the field.',
+    good: 'People and partners dealing with compulsive sexual behaviour.',
+    note: 'Third edition, 2001.' },
+  { id: 'this-naked-mind', title: 'This Naked Mind', sub: 'Control Alcohol, Find Freedom, Discover Happiness', author: 'Annie Grace', year: 2015, pages: 290, approx: true,
+    cats: ['substance'], color: 'linear-gradient(160deg,#b45309,#fbbf24)',
+    blurb: 'Explores the beliefs and marketing that keep people drinking, and offers a mindset-based approach to cutting back or stopping alcohol.',
+    good: 'Anyone rethinking their relationship with alcohol.',
+    note: 'Page count is approximate. Check your copy.' },
+  { id: 'easy-way', title: 'Allen Carr\'s Easy Way to Stop Smoking', sub: 'Be a Happy Non-Smoker for the Rest of Your Life', author: 'Allen Carr', year: 1985, pages: 256,
+    cats: ['substance'], color: 'linear-gradient(160deg,#334155,#64748b)',
+    blurb: 'A classic, widely read approach to quitting smoking that focuses on changing how you think about cigarettes rather than on willpower alone.',
+    good: 'Smokers and vapers who want to quit.',
+    note: 'First published 1985; editions vary.' }
+];
+const bookById = id => BOOKS.find(b => b.id === id);
+const coverStyle = b => `background:${b.color}`;
+const initials = t => t.replace(/[^A-Za-z ]/g, '').split(' ').filter(w => w.length > 2).slice(0, 2).map(w => w[0]).join('').toUpperCase() || t[0];
+
+function calcText(pages, days) {
+  const m = planMath(pages, days);
+  let t = `${m.pages} pages ÷ ${m.askedDays} days = ${m.ppd} page${m.ppd === 1 ? '' : 's'} a day`;
+  if (m.days < m.askedDays) t += ` (you will finish in ${m.days} days)`;
+  return t;
+}
+
+function initBooks() {
+  if (!$('bookGrid')) return;
+  const state = { cat: 'all', q: '' };
+  const render = () => {
+    const q = state.q.trim().toLowerCase();
+    const list = BOOKS.filter(b => (state.cat === 'all' || b.cats.includes(state.cat)) &&
+      (!q || (b.title + ' ' + b.author + ' ' + b.blurb + ' ' + b.sub).toLowerCase().includes(q)));
+    $('bookGrid').innerHTML = list.map((b, i) => `
+      <button class="book-card" data-id="${b.id}" aria-label="Open ${esc(b.title)}">
+        <div class="cover" style="${coverStyle(b)}"><span class="cover-n">${String(BOOKS.indexOf(b) + 1).padStart(2, '0')}</span><b>${esc(b.title)}</b><i>${esc(b.author)}</i></div>
+        <div class="book-info"><h3>${esc(b.title)}</h3><p class="by">${esc(b.author)} · ${b.year}</p>
+          <p class="pg">${b.approx ? '≈ ' : ''}${b.pages} pages</p></div>
+      </button>`).join('');
+    $('bookEmpty').classList.toggle('hidden', list.length > 0);
+  };
+  bind('bookSearch', 'input', e => { state.q = e.target.value; render(); });
+  bind('bookChips', 'click', e => {
+    const chip = e.target.closest('.chip'); if (!chip) return;
+    document.querySelectorAll('#bookChips .chip').forEach(c => c.classList.toggle('active', c === chip));
+    state.cat = chip.dataset.cat; render();
+  });
+  const applyTopic = () => {
+    const topic = qs.get('topic');
+    if (topic && document.querySelector(`#bookChips .chip[data-cat="${topic}"]`)) {
+      document.querySelectorAll('#bookChips .chip').forEach(c => c.classList.toggle('active', c.dataset.cat === topic));
+      state.cat = topic; render();
+    }
+  };
+  applyTopic(); routeHooks.books = applyTopic;
+
+  const modal = $('bookModal');
+  const close = () => { if (modal.close) modal.close(); else modal.removeAttribute('open'); };
+  const showPlan = (b, days) => {
+    const m = planMath(b.pages, days);
+    const sched = [];
+    for (let d = 1; d <= Math.min(5, m.days); d++) sched.push(`<li><b>Day ${d}</b> pages ${(d - 1) * m.ppd + 1} to ${Math.min(b.pages, d * m.ppd)}</li>`);
+    $('planOut').innerHTML = `<p class="calc">${esc(calcText(b.pages, days))}</p><ul class="sched">${sched.join('')}${m.days > 5 ? '<li class="more-dots">…</li>' : ''}</ul>`;
+    $('useBook').href = `#tracker?book=${b.id}&days=${days}`;
+  };
+  $('bookGrid').addEventListener('click', e => {
+    const card = e.target.closest('.book-card'); if (!card) return;
+    const b = bookById(card.dataset.id); if (!b) return;
+    const suggested = Math.min(60, Math.max(7, Math.round(b.pages / 15)));
+    $('bookModalBody').innerHTML = `
+      <div class="book-detail">
+        <div class="cover big" style="${coverStyle(b)}"><span class="cover-n">${String(BOOKS.indexOf(b) + 1).padStart(2, '0')}</span><b>${esc(b.title)}</b><i>${esc(b.author)}</i></div>
+        <div>
+          <h3>${esc(b.title)}</h3>
+          <p class="by">${esc(b.sub)}</p>
+          <p class="by">${esc(b.author)} · ${b.year} · ${b.approx ? '≈ ' : ''}${b.pages} pages</p>
+          <p>${esc(b.blurb)}</p>
+          <p><b>Good for:</b> ${esc(b.good)}</p>
+          ${b.note ? `<p class="hint">${esc(b.note)}</p>` : ''}
+        </div>
+      </div>
+      <div class="plan-box">
+        <h4>Plan your reading</h4>
+        <label>How many days do you want to take? <b id="dayVal">${suggested}</b>
+          <input type="range" id="daySlider" min="3" max="90" value="${suggested}"></label>
+        <div id="planOut"></div>
+        <div class="modal-actions"><a class="btn btn-sun" id="useBook" href="#">Use this book in my tracker</a></div>
+      </div>`;
+    showPlan(b, suggested);
+    $('daySlider').addEventListener('input', ev => { $('dayVal').textContent = ev.target.value; showPlan(b, Number(ev.target.value)); });
+    if (modal.showModal) modal.showModal(); else modal.setAttribute('open', '');
+  });
+  bind('bookModalClose', 'click', close);
+  modal.addEventListener('click', e => { if (e.target === modal) close(); });
+  render();
+}
+
+// ---------------------------------------------------------------
+// Tracker page: streak + reading gate + extras
+// ---------------------------------------------------------------
+const MILESTONES = [
+  { d: 1, i: '🌅', n: '1 day' }, { d: 3, i: '🌱', n: '3 days' }, { d: 7, i: '⭐', n: '1 week' },
+  { d: 14, i: '🔥', n: '2 weeks' }, { d: 30, i: '🏅', n: '1 month' }, { d: 60, i: '💎', n: '2 months' },
+  { d: 90, i: '🏆', n: '3 months' }, { d: 180, i: '👑', n: '6 months' }, { d: 365, i: '🎉', n: '1 year' }
+];
+const RING = 326.7;
+const trk = { tracker: null, plans: [], checkins: [], progress: null };
+
+function renderMilestones(done) {
+  $('milestones').innerHTML = MILESTONES.map(m => `
+    <div class="m-badge ${done >= m.d ? 'got' : ''}"><div class="mi">${m.i}</div><b>${m.n}</b><small>${done >= m.d ? 'Reached!' : (m.d - done) + ' to go'}</small></div>`).join('');
+}
+
+function fillBookSelect(sel, allowKeep) {
+  const keep = allowKeep ? `<option value="keep">Continue my current book</option>` : '<option value="">Choose a book…</option>';
+  sel.innerHTML = keep + BOOKS.map(b => `<option value="${b.id}">${esc(b.title)} · ${esc(b.author)}</option>`).join('');
+}
+
+// wires a "book + pages + days" picker and keeps the calculation text up to date
+function wirePicker(p) {
+  const upd = () => {
+    const sel = $(p.sel).value;
+    if (sel === 'keep') { $(p.pages).disabled = true; $(p.days).disabled = true; $(p.calc).textContent = 'You will keep following your current reading plan.'; return; }
+    $(p.pages).disabled = false; $(p.days).disabled = false;
+    const pages = Number($(p.pages).value), days = Number($(p.days).value);
+    $(p.calc).textContent = (sel && pages > 0 && days > 0) ? calcText(pages, days) : 'Pick a book and the number of days to see your daily pages.';
+  };
+  $(p.sel).addEventListener('change', () => { const b = bookById($(p.sel).value); if (b) $(p.pages).value = b.pages; upd(); });
+  $(p.pages).addEventListener('input', upd);
+  $(p.days).addEventListener('input', () => { $(p.days).dataset.touched = '1'; upd(); });
+  return upd;
+}
+
+function activePlan(plans, today) {
+  return plans.slice().reverse().find(p => assignmentFor(p, today)) || plans[plans.length - 1] || null;
+}
+
+async function loadTrackerData() {
+  let tracker = null, reading = { plans: [], checkins: [] };
+  try { tracker = await api('/tracker'); } catch { /* ignore */ }
+  try { reading = await api('/reading'); } catch { /* ignore */ }
+  trk.tracker = tracker; trk.plans = reading.plans || []; trk.checkins = reading.checkins || [];
+}
+
+function renderTracker() {
+  const today = todayStr();
+  const t = trk.tracker;
+  if (!t) {
+    $('trackerDisplay').classList.add('hidden'); $('trackerEmpty').classList.remove('hidden');
+    $('relapseBtn').classList.add('hidden'); $('readingCard').classList.add('hidden');
+    renderMilestones(0); trk.progress = null; return;
+  }
+  const pr = computeProgress(t, trk.plans, trk.checkins, today);
+  trk.progress = pr;
+  const done = pr.done, left = Math.max(0, t.goal - done), pct = Math.min(100, Math.round((done / t.goal) * 100));
+  const spend = Number(ls.get('spend', 0)) || 0;
+
+  $('trackerEmpty').classList.add('hidden'); $('trackerDisplay').classList.remove('hidden'); $('relapseBtn').classList.remove('hidden');
+  $('trackerLabel').textContent = `Quitting: ${t.addiction} · goal ${t.goal} days`;
+  $('daysDone').textContent = done; $('daysLeft').textContent = left; $('trackerPercent').textContent = pct + '%';
+  $('moneySaved').textContent = 'KES ' + (done * spend).toLocaleString('en-KE');
+  $('progressBar').style.width = pct + '%';
+  $('ringFg').style.strokeDashoffset = String(RING - (RING * pct) / 100);
+
+  let msg;
+  if (pr.needsBook) msg = '📚 Your book plan has ended. Choose your next book below to keep your days counting.';
+  else if (pr.missing.length) msg = `⏸ Streak paused: the reading for ${fmtDate(pr.missing[0])} is missing. Catch up below to continue.`;
+  else if (left === 0) msg = '🎉 Goal reached! Amazing work. Set a new goal to keep going.';
+  else if (done === 0) msg = pr.todayRead ? '✅ Today\'s reading is done. Day one counts tomorrow!' : 'Day one: read today\'s pages so tomorrow counts.';
+  else msg = `Keep going! ${left} day${left === 1 ? '' : 's'} to your goal. 💪`;
+  $('trackerMessage').textContent = msg;
+  renderMilestones(done);
+  renderReading(pr, today);
+}
+
+function renderReading(pr, today) {
+  const card = $('readingCard');
+  const plan = activePlan(trk.plans, today);
+  card.classList.remove('hidden');
+  if (!plan) { card.classList.add('hidden'); return; }
+  const book = bookById(plan.book_id) || { title: 'Your book', color: 'linear-gradient(160deg,#4338ca,#ec4899)', author: '' };
+  $('readCover').setAttribute('style', coverStyle(book));
+  $('readCover').textContent = initials(book.title);
+  $('readBookTitle').textContent = book.title;
+  const idx = Math.min(plan.days, Math.max(0, diffDays(today, plan.start_date) + 1));
+  const readInPlan = trk.checkins.filter(c => { const a = assignmentFor(plan, c.date); return !!a; }).length;
+  $('readMeta').textContent = `${plan.pages} pages · ${plan.ppd} per day · ${plan.days} days`;
+  $('readProgressBar').style.width = Math.round((readInPlan / plan.days) * 100) + '%';
+  $('readProgressText').textContent = `Day ${idx} of ${plan.days} · ${readInPlan} of ${plan.days} readings checked in`;
+
+  const chip = $('readStatus');
+  let cls = 'ok', txt = '🔓 Tomorrow unlocked';
+  if (pr.needsBook) { cls = 'warn'; txt = '📚 Pick your next book'; }
+  else if (pr.missing.length) { cls = 'warn'; txt = '⏸ Streak paused: catch up'; }
+  else if (pr.todayAssign && !pr.todayRead) { cls = 'lock'; txt = '🔒 Read today to unlock tomorrow'; }
+  chip.className = 'chip-status ' + cls; chip.textContent = txt;
+
+  const pending = pr.missing.slice();
+  if (pr.todayAssign && !pr.todayRead) pending.push(today);
+  $('readForm').classList.toggle('hidden', pending.length === 0);
+  if (pending.length) {
+    const cur = $('readDaySel').value;
+    $('readDaySel').innerHTML = pending.map(d => {
+      const a = assignmentForDate(trk.plans, d);
+      return `<option value="${d}">${d === today ? 'Today' : fmtDate(d)} · Day ${a.dayIdx} · pages ${a.from}–${a.to}</option>`;
+    }).join('');
+    if (pending.includes(cur)) $('readDaySel').value = cur;
+    updateReadAssign();
+  }
+
+  const info = $('readInfo');
+  if (!pending.length && pr.todayAssign && pr.todayRead) {
+    const tomorrow = assignmentForDate(trk.plans, addDays(today, 1));
+    info.classList.remove('hidden');
+    info.innerHTML = `✅ <b>Today's reading is done.</b> Tomorrow${tomorrow ? ` you will read pages ${tomorrow.from}–${tomorrow.to}` : ' you will start your next book'}.`;
+  } else info.classList.add('hidden');
+
+  const noToday = !pr.todayAssign;
+  $('nextBookBox').classList.toggle('hidden', !(noToday || pr.needsBook));
+}
+
+function updateReadAssign() {
+  const d = $('readDaySel').value;
+  const a = d ? assignmentForDate(trk.plans, d) : null;
+  if (!a) return;
+  const book = bookById(a.plan.book_id);
+  $('readAssign').innerHTML = `<b>Day ${a.dayIdx} of ${a.plan.days}</b>: read pages <b>${a.from}–${a.to}</b> of <i>${esc(book ? book.title : 'your book')}</i> (${a.to - a.from + 1} pages).`;
+  $('readConfirmText').textContent = `I read pages ${a.from}–${a.to}.`;
+  updateReadGate();
+}
+function updateReadGate() {
+  const w = countWords($('readNote').value);
+  $('readWords').textContent = `${w} / ${MIN_WORDS} words`;
+  $('readMeter').style.width = Math.min(100, Math.round((w / MIN_WORDS) * 100)) + '%';
+  $('readSubmit').disabled = !($('readConfirm').checked && w >= MIN_WORDS);
+}
+
+function renderExtras() {
+  const reasons = () => {
+    $('reasonList').innerHTML = ls.get('reasons', []).map((r, i) => `<li><span>🎯 ${esc(r)}</span><button class="x-btn" data-i="${i}" aria-label="Remove reason">✕</button></li>`).join('');
+  };
+  bind('reasonForm', 'submit', e => {
+    e.preventDefault();
+    const v = $('reasonText').value.trim(); if (!v) return;
+    const l = ls.get('reasons', []); l.push(v); ls.set('reasons', l); $('reasonText').value = ''; reasons();
+  });
+  bind('reasonList', 'click', e => {
+    const b = e.target.closest('.x-btn'); if (!b) return;
+    const l = ls.get('reasons', []); l.splice(Number(b.dataset.i), 1); ls.set('reasons', l); reasons();
+  });
+  reasons();
+
+  const pledge = () => {
+    const p = ls.get('pledges', []); const doneToday = p.includes(todayStr());
+    $('pledgeBtn').disabled = doneToday;
+    $('pledgeBtn').textContent = doneToday ? '✅ Pledged today' : 'I pledge for today';
+    $('pledgeCount').textContent = `${p.length} pledge${p.length === 1 ? '' : 's'} so far`;
+  };
+  bind('pledgeBtn', 'click', () => {
+    const p = ls.get('pledges', []);
+    if (!p.includes(todayStr())) { p.push(todayStr()); ls.set('pledges', p); toast('Well done. One more day, one pledge at a time.'); }
+    pledge();
+  });
+  pledge();
+
+  const journal = () => {
+    $('journalList').innerHTML = ls.get('journal', []).slice().reverse().map(j => `
+      <li><button class="x-btn" data-id="${j.id}" aria-label="Delete entry">✕</button>
+        <time>${esc(new Date(j.id).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' }))}</time>${esc(j.mood)} ${esc(j.text)}</li>`).join('');
+  };
+  bind('journalForm', 'submit', e => {
+    e.preventDefault();
+    const text = $('journalText').value.trim(); if (!text) return;
+    const mood = (document.querySelector('input[name="mood"]:checked') || { value: '🙂' }).value;
+    const l = ls.get('journal', []); l.push({ id: Date.now(), mood, text }); ls.set('journal', l);
+    $('journalText').value = ''; journal(); toast('Entry saved on this device.');
+  });
+  bind('journalList', 'click', e => {
+    const b = e.target.closest('.x-btn'); if (!b) return;
+    ls.set('journal', ls.get('journal', []).filter(j => String(j.id) !== b.dataset.id)); journal();
+  });
+  journal();
+}
+
+async function initTracker() {
+  if (!$('trackerForm')) return;
+  $('trackAddiction').innerHTML = addictions.map(a => `<option>${esc(a.name)}</option>`).join('');
+  fillBookSelect($('trackBook'), false);
+  fillBookSelect($('nextBook'), false);
+  $('trackSpend').value = ls.get('spend', 0);
+  $('nextDays').value = 14;
+
+  const upd = wirePicker({ sel: 'trackBook', pages: 'trackPages', days: 'trackDays', calc: 'trackCalc' });
+  const updNext = wirePicker({ sel: 'nextBook', pages: 'nextPages', days: 'nextDays', calc: 'nextCalc' });
+  $('trackGoal').addEventListener('input', () => { if (!$('trackDays').dataset.touched) { $('trackDays').value = $('trackGoal').value; upd(); } });
+  $('trackDays').value = $('trackGoal').value;
+
+  // prefill from links on other views
+  const applyParams = () => {
+    const qa = qs.get('addiction'); if (qa && addictions.some(a => a.name === qa)) $('trackAddiction').value = qa;
+    const qb = qs.get('book');
+    if (qb && bookById(qb)) { $('trackBook').value = qb; $('trackPages').value = bookById(qb).pages; }
+    const qd = Number(qs.get('days')); if (qd >= 1 && qd <= 365) { $('trackDays').value = qd; $('trackDays').dataset.touched = '1'; }
+    upd(); updNext();
+  };
+  applyParams();
+
+  await loadTrackerData();
+  // allow "continue current book" when a plan is still running
+  const running = trk.plans.some(p => diffDays(todayStr(), p.start_date) + 1 <= p.days);
+  if (running && trk.tracker) {
+    const prev = $('trackBook').value;
+    fillBookSelect($('trackBook'), true);
+    $('trackBook').value = prev || 'keep'; upd();
+  }
+  renderTracker(); renderExtras(); renderMilestones(trk.progress ? trk.progress.done : 0);
+  routeHooks.tracker = async () => { applyParams(); await loadTrackerData(); renderTracker(); renderMilestones(trk.progress ? trk.progress.done : 0); };
+
+  $('trackerForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const choice = $('trackBook').value;
+    if (!choice) { toast('Please choose a book. Daily reading is part of your plan.'); return; }
+    try {
+      ls.set('spend', Math.max(0, Number($('trackSpend').value) || 0));
+      await api('/tracker', 'POST', { addiction: $('trackAddiction').value, goal: parseInt($('trackGoal').value, 10) || 30 });
+      if (choice !== 'keep') {
+        await api('/reading/plan', 'POST', { book_id: choice, pages: Number($('trackPages').value), days: Number($('trackDays').value), start_date: todayStr() });
+      }
+      await loadTrackerData(); renderTracker();
+      toast('Streak started. Read today\'s pages to unlock tomorrow!');
+      const rc = $('readingCard'); if (rc && rc.scrollIntoView) rc.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } catch (err) { toast(err.message); }
+  });
+
+  bind('relapseBtn', 'click', async () => {
+    if (!confirm('Reset your streak? A slip is not the end. It is a fresh start.')) return;
+    try { await api('/tracker/reset', 'POST'); await loadTrackerData(); renderTracker(); toast('Fresh start. Be kind to yourself.'); }
+    catch (err) { toast(err.message); }
+  });
+
+  bind('readDaySel', 'change', updateReadAssign);
+  bind('readConfirm', 'change', updateReadGate);
+  bind('readNote', 'input', updateReadGate);
+  bind('readForm', 'submit', async e => {
+    e.preventDefault();
+    try {
+      await api('/reading/checkin', 'POST', { date: $('readDaySel').value, note: $('readNote').value });
+      $('readNote').value = ''; $('readConfirm').checked = false;
+      await loadTrackerData(); renderTracker();
+      confetti(); toast('Reading checked in. Well done!');
+    } catch (err) { toast(err.message); }
+  });
+
+  bind('nextBookForm', 'submit', async e => {
+    e.preventDefault();
+    if (!$('nextBook').value) { toast('Please choose your next book.'); return; }
+    try {
+      const start = trk.progress && trk.progress.gapStart ? trk.progress.gapStart : todayStr();
+      await api('/reading/plan', 'POST', { book_id: $('nextBook').value, pages: Number($('nextPages').value), days: Number($('nextDays').value), start_date: start });
+      await loadTrackerData(); renderTracker(); toast('New book added to your plan.');
+    } catch (err) { toast(err.message); }
+  });
+}
+
+// ---------------------------------------------------------------
+// Counselors + chat
+// ---------------------------------------------------------------
+let counselors = [];
+let paid = false;
+let payMethodUsed = '';
+
+async function loadPaid() {
+  try { const r = await api('/payment/status'); paid = !!r.paid; payMethodUsed = r.method || ''; } catch { paid = false; }
+}
+
+function renderCounselorCards(q) {
+  const el = $('counselorList'); if (!el) return;
+  q = (q || '').trim().toLowerCase();
+  const spec = counselorSpec;
+  const list = counselors.filter(c => (!spec || c.specialty === spec) && (!q || (c.name + ' ' + c.specialty + ' ' + (c.bio || '')).toLowerCase().includes(q)));
+  renderCounselorExtras();
+  el.innerHTML = list.length
+    ? list.map(c => `
+      <article class="c-person">
+        <div class="avatar">${esc(c.name.charAt(0).toUpperCase())}</div>
+        <h4>${esc(c.name)}</h4><span class="spec">${esc(c.specialty)}</span>
+        <p>${esc(c.bio || '')}</p>${c.email ? `<small>${esc(c.email)}</small>` : ''}
+        <div class="c-actions"><button class="btn ${String(c.id) === String(ls.get('selCounselor', '')) ? 'going' : 'btn-teal'} small" data-select="${c.id}">${String(c.id) === String(ls.get('selCounselor', '')) ? '✓ Selected' : 'Select this counselor'}</button></div>
+      </article>`).join('')
+    : `<p class="empty">${counselors.length ? 'No counselor matches your search.' : 'No counselors are available yet. Please check back soon.'}</p>`;
+}
+
+async function loadCounselors() {
+  try { counselors = await api('/counselors'); } catch { counselors = []; }
+  renderCounselorCards($('cSearch') ? $('cSearch').value : '');
+  renderChatCounselors();
+}
+
+let counselorSpec = '';
+function renderCounselorExtras() {
+  const chips = $('cChips'), bar = $('selBar'); if (!chips || !bar) return;
+  const specs = [...new Set(counselors.map(c => c.specialty))];
+  chips.innerHTML = specs.length > 1
+    ? ['', ...specs].map(sp => `<button class="chip ${sp === counselorSpec ? 'active' : ''}" data-spec="${esc(sp)}">${sp ? esc(sp) : 'All'}</button>`).join('') : '';
+  const sel = counselors.find(c => String(c.id) === String(ls.get('selCounselor', '')));
+  bar.classList.toggle('hidden', !sel);
+  if (sel) bar.innerHTML = `<span>You selected <b>${esc(sel.name)}</b> (${esc(sel.specialty)})</span><a class="btn btn-sun small" href="#chat?c=${sel.id}">Continue to chat →</a>`;
+}
+
+async function initCounselors() {
+  if (!$('counselorList')) return;
+  bind('cSearch', 'input', e => renderCounselorCards(e.target.value));
+  bind('cChips', 'click', e => {
+    const b = e.target.closest('[data-spec]'); if (!b) return;
+    counselorSpec = b.dataset.spec; renderCounselorCards($('cSearch').value);
+  });
+  $('counselorList').addEventListener('click', e => {
+    const b = e.target.closest('[data-select]'); if (!b) return;
+    ls.set('selCounselor', b.dataset.select);
+    renderCounselorCards($('cSearch').value);
+    toast('Counselor selected. Press "Continue to chat" when you are ready.');
+  });
+}
+
+function renderChatCounselors() {
+  const sel = $('chatCounselor'); if (!sel) return;
+  const current = qs.get('c') || ls.get('selCounselor', '') || sel.value || '';
+  sel.innerHTML = counselors.length
+    ? counselors.map(c => `<option value="${c.id}">${esc(c.name)} (${esc(c.specialty)})</option>`).join('')
+    : '<option value="">Add a counselor first</option>';
+  if (current && counselors.some(c => String(c.id) === String(current))) sel.value = current;
+  renderMessages();
+}
+
+async function renderMessages() {
+  const sel = $('chatCounselor'); if (!sel) return;
+  const el = $('chatMessages');
+  if (!paid || !sel.value) { el.innerHTML = '<p class="empty">Add a counselor on the Counselors page, then select them to start chatting.</p>'; return; }
+  let msgs = [];
+  try { msgs = await api('/messages?counselor_id=' + sel.value); } catch { return; }
+  const html = msgs.length
+    ? msgs.map(m => {
+        const time = new Date(m.created * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        return `<div class="msg ${m.role === 'patient' ? 'patient' : 'counselor'}"><small>${m.role === 'patient' ? 'Patient' : 'Counselor'} · ${time}</small>${esc(m.text)}</div>`;
+      }).join('')
+    : '<p class="empty">No messages yet. Say hello 👋</p>';
+  if (el.innerHTML !== html) { el.innerHTML = html; el.scrollTop = el.scrollHeight; }
+}
+
+async function initChat() {
+  if (!$('chatArea')) return;
+  await loadPaid();
+  $('chatLocked').classList.toggle('hidden', paid);
+  $('chatArea').classList.toggle('hidden', !paid);
+  bind('chatCounselor', 'change', renderMessages);
+  bind('chatForm', 'submit', async e => {
+    e.preventDefault();
+    const id = $('chatCounselor').value;
+    if (!id) { toast('Please add a counselor first.'); return; }
+    try {
+      await api('/messages', 'POST', { counselor_id: Number(id), role: $('chatRole').value, text: $('chatText').value });
+      $('chatText').value = ''; await renderMessages();
+    } catch (err) { toast(err.message); }
+  });
+  setInterval(() => { if (paid && !document.hidden) renderMessages(); }, 4000);
+}
+
+// ---------------------------------------------------------------
+// Pricing page: many ways to pay
+// ---------------------------------------------------------------
+// REAL PAYMENTS (when you go live):
+//  - M-Pesa / Airtel Money: your Python backend starts an STK push with the Safaricom Daraja API
+//    (or a provider such as Pesapal, Flutterwave or Paystack) and unlocks access only in the payment callback.
+//  - Card: never handle raw card numbers yourself. Use the gateway's hosted card fields
+//    (Stripe Elements, Paystack Inline, Flutterwave Inline, Pesapal iframe).
+//  - PayPal: load the PayPal JS SDK with your client id and call paypal.Buttons({...}).
+//  - Google Pay: use the Google Pay API (google.payments.api.PaymentsClient) with your gateway.
+//  In this preview every method is simulated: nobody is charged and card numbers are never sent anywhere.
+const PAY_METHODS = [
+  { id: 'mpesa', name: 'M-Pesa', icon: 'M', color: '#16a34a', kind: 'mobile', price: 'KES 130', hint: 'Safaricom mobile money. You will get a payment prompt on your phone.' },
+  { id: 'airtel', name: 'Airtel Money', icon: 'A', color: '#dc2626', kind: 'mobile', price: 'KES 130', hint: 'Pay with your Airtel Money wallet.' },
+  { id: 'card', name: 'Credit / Debit card', icon: '💳', color: '#4338ca', kind: 'card', price: '$1.00 USD', hint: 'Visa, Mastercard and other cards.' },
+  { id: 'paypal', name: 'PayPal', icon: 'P', color: '#1d4ed8', kind: 'wallet', price: '$1.00 USD', hint: 'Pay with your PayPal balance or linked card.' },
+  { id: 'googlepay', name: 'Google Pay', icon: 'G', color: '#0ea5a4', kind: 'wallet', price: '$1.00 USD', hint: 'Pay with a card saved to your Google account.' },
+  { id: 'bank', name: 'Bank transfer', icon: '🏦', color: '#b45309', kind: 'bank', price: 'KES 130', hint: 'Send the amount from your bank app.' }
+];
+
+function luhn(num) {
+  const d = num.replace(/\D/g, '');
+  if (d.length < 13 || d.length > 19) return false;
+  let sum = 0, alt = false;
+  for (let i = d.length - 1; i >= 0; i--) { let n = Number(d[i]); if (alt) { n *= 2; if (n > 9) n -= 9; } sum += n; alt = !alt; }
+  return sum % 10 === 0;
+}
+function expOk(v) {
+  const m = /^(\d{2})\s*\/\s*(\d{2})$/.exec(v.trim()); if (!m) return false;
+  const mm = Number(m[1]), yy = 2000 + Number(m[2]);
+  if (mm < 1 || mm > 12) return false;
+  const end = new Date(yy, mm, 1);          // first day of the month after expiry
+  return end > new Date();
+}
+
+function payFormHtml(m) {
+  if (m.kind === 'mobile') return `
+    <p class="hint">${m.hint}</p>
+    <label>${m.name} phone number<input type="tel" id="payPhone" placeholder="07XX XXX XXX" autocomplete="tel" required></label>
+    <button class="btn btn-sun wide" type="submit" id="payBtn">Send ${m.name} request · ${m.price}</button>`;
+  if (m.kind === 'card') return `
+    <p class="hint">${m.hint} <b>Preview only:</b> card details are checked in your browser and never sent or stored.</p>
+    <label>Name on card<input type="text" id="cardName" autocomplete="cc-name" placeholder="A. Mwangi" required></label>
+    <label>Card number<input type="text" id="cardNumber" inputmode="numeric" autocomplete="cc-number" placeholder="1234 5678 9012 3456" maxlength="23" required></label>
+    <div class="two"><label>Expiry<input type="text" id="cardExp" inputmode="numeric" autocomplete="cc-exp" placeholder="MM/YY" maxlength="5" required></label>
+    <label>CVC<input type="password" id="cardCvc" inputmode="numeric" autocomplete="cc-csc" placeholder="123" maxlength="4" required></label></div>
+    <p class="field-err" id="cardErr"></p>
+    <button class="btn btn-sun wide" type="submit" id="payBtn">Pay ${m.price}</button>`;
+  if (m.kind === 'wallet') return `
+    <p class="hint">${m.hint}</p>
+    <button class="btn wallet-btn ${m.id}" type="submit" id="payBtn">${m.id === 'paypal' ? '<b>Pay</b><i>Pal</i>' : '<b>G</b> Pay'} · ${m.price}</button>
+    <p class="hint">A secure ${m.name} window opens when this is connected to your account.</p>`;
+  const ref = 'AS-' + getClientId().replace(/\W/g, '').slice(0, 6).toUpperCase();
+  return `
+    <p class="hint">${m.hint}</p>
+    <div class="bank-box"><div><span>Bank</span><b>(add your bank name)</b></div><div><span>Account name</span><b>(add account name)</b></div><div><span>Account number</span><b>(add account number)</b></div><div><span>Reference</span><b>${ref}</b></div><div><span>Amount</span><b>KES 130</b></div></div>
+    <button class="btn btn-sun wide" type="submit" id="payBtn">I have sent the money</button>
+    <p class="hint">In real use, access should unlock only after you confirm the deposit.</p>`;
+}
+
+async function processPayment(method, extra) {
+  const btn = $('payBtn'); const old = btn ? btn.innerHTML : '';
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spin"></span> Processing…'; }
+  try {
+    await sleep(900);
+    await api('/pay', 'POST', { method, ...extra });
+    await loadPaid();
+    renderPayBanner(true);
+    confetti(); toast('Payment received. Chat is unlocked!');
+    const m = PAY_METHODS.find(x => x.id === method);
+    $('payPanel').innerHTML = `<div class="pay-done"><div class="big-emoji">✅</div><h3>Payment received</h3><p>Paid with ${m ? m.name : method}. You can now chat with any counselor.</p><a class="btn btn-sun" href="#chat">Go to chat</a></div>`;
+  } catch (err) {
+    toast(err.message);
+    if (btn) { btn.disabled = false; btn.innerHTML = old; }
+  }
+}
+
+function renderPayBanner(isPaid) {
+  const b = $('payBanner'); if (!b) return;
+  b.classList.toggle('hidden', !isPaid);
+  if (isPaid) {
+    const m = PAY_METHODS.find(x => x.id === payMethodUsed);
+    b.innerHTML = `✅ You already have access${m ? ' (paid with ' + m.name + ')' : ''}. <a href="#chat">Open chat →</a>`;
+  }
+}
+
+async function initPayment() {
+  if (!$('payMethods')) return;
+  await loadPaid();
+  renderPayBanner(paid);
+  $('payMethods').innerHTML = PAY_METHODS.map(m => `
+    <button type="button" class="pm" data-m="${m.id}" aria-pressed="false">
+      <span class="pm-ic" style="background:${m.color}">${m.icon}</span><span class="pm-name">${m.name}</span><span class="pm-price">${m.price}</span>
+    </button>`).join('');
+
+  const select = id => {
+    const m = PAY_METHODS.find(x => x.id === id); if (!m) return;
+    document.querySelectorAll('#payMethods .pm').forEach(b => { const on = b.dataset.m === id; b.classList.toggle('active', on); b.setAttribute('aria-pressed', String(on)); });
+    $('payPanel').innerHTML = `<form id="payForm" class="stack" novalidate><h3>Pay with ${m.name}</h3>${payFormHtml(m)}</form>`;
+    $('sumMethod').textContent = m.name;
+    $('sumTotal').textContent = m.price + (m.price.startsWith('$') ? ' (≈ KES 130)' : '');
+    if (m.kind === 'card') {
+      $('cardNumber').addEventListener('input', e => { e.target.value = e.target.value.replace(/\D/g, '').slice(0, 19).replace(/(.{4})/g, '$1 ').trim(); });
+      $('cardExp').addEventListener('input', e => { let v = e.target.value.replace(/\D/g, '').slice(0, 4); if (v.length > 2) v = v.slice(0, 2) + '/' + v.slice(2); e.target.value = v; });
+      $('cardCvc').addEventListener('input', e => { e.target.value = e.target.value.replace(/\D/g, '').slice(0, 4); });
+    }
+    $('payForm').addEventListener('submit', async ev => {
+      ev.preventDefault();
+      if (m.kind === 'mobile') {
+        if ($('payPhone').value.replace(/\D/g, '').length < 9) { toast('Enter a valid phone number.'); return; }
+        await processPayment(m.id, { phone: $('payPhone').value });
+      } else if (m.kind === 'card') {
+        const err = $('cardErr');
+        if (!$('cardName').value.trim()) { err.textContent = 'Enter the name on the card.'; return; }
+        if (!luhn($('cardNumber').value)) { err.textContent = 'That card number does not look valid.'; return; }
+        if (!expOk($('cardExp').value)) { err.textContent = 'Check the expiry date (MM/YY).'; return; }
+        if ($('cardCvc').value.length < 3) { err.textContent = 'Enter the 3 or 4 digit CVC.'; return; }
+        err.textContent = '';
+        $('cardNumber').value = ''; $('cardCvc').value = '';       // never kept
+        await processPayment('card', {});
+      } else await processPayment(m.id, {});
+    });
+  };
+  $('payMethods').addEventListener('click', e => { const b = e.target.closest('.pm'); if (b) select(b.dataset.m); });
+  select('mpesa');
+}
+
+// ---------------------------------------------------------------
+// Contact page
+// ---------------------------------------------------------------
+function initContact() {
+  bind('callbackForm', 'submit', async e => {
+    e.preventDefault();
+    try {
+      await api('/callback', 'POST', { name: $('cbName').value, phone: $('cbPhone').value, time: $('cbTime').value, message: $('cbMessage').value });
+      e.target.reset();
+      $('cbStatus').textContent = '✅ Thank you. We will call you back soon.';
+    } catch (err) { $('cbStatus').textContent = err.message; }
+  });
+}
+
+
+// ===============================================================
+// Handbooks
+// ===============================================================
+const HANDBOOKS = [
+  { id: 'first30', icon: '🌅', color: 'linear-gradient(135deg,#f59e0b,#ea580c)', title: 'Your First 30 Days', sub: 'A calm, week-by-week guide for the first month of quitting.',
+    chapters: [
+      { h: 'Before you start', warn: 'If you drink heavily every day or take sedatives (such as benzodiazepines), do not stop suddenly on your own. Withdrawal can cause seizures and can be life-threatening. Speak to a doctor or clinic first.',
+        p: ['Write down your reason in one sentence and keep it where you will see it. Tell one safe person that you are starting.'],
+        ul: ['Remove or block what you can: apps, contacts, stock at home.', 'Plan how you will spend the hours you used to spend using.', 'Choose a book in the library and set your daily reading.'] },
+      { h: 'Week 1: ride out the urges', p: ['Urges rise, peak and fall, usually within 20 to 30 minutes. You do not have to fight them. You only have to outlast them.'],
+        ul: ['Eat regular meals, drink water and protect your sleep.', 'Keep your hands and mind busy during the hard hours.', 'Do your daily reading and check in. It anchors the day.'] },
+      { h: 'Week 2: build a routine', p: ['Structure protects you. A steady routine leaves fewer gaps for old habits to fill.'],
+        ul: ['Wake and sleep at the same times.', 'Walk or exercise for 20 to 30 minutes.', 'Plan your riskiest time of day in advance.'] },
+      { h: 'Weeks 3 and 4: face the quiet', p: ['Boredom, low mood and restlessness are common as the early rush fades. They pass, and they are a good topic for your counselor.'],
+        ul: ['Write in your journal when the mood dips.', 'Celebrate small wins: a week, two weeks, a finished book.'] },
+      { h: 'After day 30', p: ['Thirty days is a milestone, not a finish line. Keep your routine, keep reading, and make a written relapse-prevention plan (see the Relapse Prevention handbook).'] }
+    ] },
+  { id: 'relapse', icon: '🛡️', color: 'linear-gradient(135deg,#0ea5a4,#0369a1)', title: 'Relapse Prevention', sub: 'Know your triggers, build a plan, and know what to do after a slip.',
+    chapters: [
+      { h: 'A slip is not the end', p: ['A single lapse does not erase your progress. What matters is what you do in the next hour.'],
+        ul: ['Stop, breathe and do not use the slip as a reason to keep going.', 'Tell someone you trust the same day.', 'Reset your tracker, write down what led up to it, and restart.'] },
+      { h: 'Know your triggers', p: ['Triggers are the people, places, times and feelings that come before an urge. A common check is HALT: are you Hungry, Angry, Lonely or Tired?'],
+        ul: ['List your top five triggers.', 'For each one, write what you will do instead.'] },
+      { h: 'Ride the urge', p: ['Use the 10-minute rule: tell yourself you can use in 10 minutes, then wait. Notice the urge like a wave rising and falling. Most urges fade before the timer ends.'] },
+      { h: 'Write your plan', p: ['Keep it short enough to use on a bad day.'],
+        ul: ['My warning signs', 'Three people I can call', 'Three things I will do instead', 'A place I can go', 'My reason, in one sentence'] },
+      { h: 'Warning signs to watch', ul: ['Skipping reading or check-ins', 'Secrecy and isolating from people', '"Just once" thinking', 'Skipping sleep, meals or routine'] }
+    ] },
+  { id: 'family', icon: '🤝', color: 'linear-gradient(135deg,#6d28d9,#ec4899)', title: 'Family and Friends', sub: 'How to support someone in recovery without losing yourself.',
+    chapters: [
+      { h: 'Understand it', p: ['Addiction is a health condition that changes how the brain handles reward and stress. It is not simply a lack of willpower or a flaw of character.'] },
+      { h: 'How to talk', ul: ['Pick a calm moment, not during or right after use.', 'Use "I" statements: "I am worried because..."', 'Be specific and kind. Avoid labels and ultimatums you will not keep.', 'Listen more than you lecture.'] },
+      { h: 'Support, not enabling', p: ['Supporting means helping the person move toward recovery. Enabling means shielding them from the results of using.'],
+        ul: ['Do not cover for them or make excuses.', 'Think twice before giving cash. Offer to pay for food, transport or treatment directly.', 'Praise effort and progress, not only results.'] },
+      { h: 'Set boundaries', p: ['Decide what you will and will not do, say it calmly, and keep to it. Boundaries protect your own health and are not a punishment.'] },
+      { h: 'Look after yourself', p: ['You need support too. Talk to a friend, a counselor or a family support group. Keep your own sleep, meals and routines.'] },
+      { h: 'In an emergency', warn: 'Call 999 or 112 straight away if the person is unconscious, cannot be woken, is having a seizure, has trouble breathing, or is talking about ending their life.',
+        p: ['Stay with them until help arrives.'] }
+    ] },
+  { id: 'toolkit', icon: '⚡', color: 'linear-gradient(135deg,#16a34a,#0f766e)', title: 'Craving and Urge Toolkit', sub: 'Quick tools to use in the moment an urge hits.',
+    chapters: [
+      { h: 'Delay', p: ['Set a timer for 10 minutes before you do anything. Urges usually weaken while you wait.'] },
+      { h: 'Change the scene', p: ['Leave the room or the house. Take a walk, wash your face, stretch or call someone. Moving your body breaks the loop.'] },
+      { h: 'Breathe', p: ['Box breathing: breathe in for 4, hold for 4, out for 4, hold for 4. Repeat for two minutes.'] },
+      { h: 'Ground yourself', p: ['Name 5 things you see, 4 you can touch, 3 you hear, 2 you smell and 1 you taste.'] },
+      { h: 'Play the tape forward', p: ['Ask: what happens after I give in, an hour from now, tomorrow morning, next week? Then read your written reason.'] },
+      { h: 'Reach out', p: ['Message a friend or your counselor, or read a few pages of your book. You do not have to carry the urge alone.'] }
+    ] },
+  { id: 'counselor', icon: '🎓', color: 'linear-gradient(135deg,#3b82f6,#4338ca)', title: 'Counselor Handbook', sub: 'Guidelines for counselors who chat with clients on the platform.',
+    chapters: [
+      { h: 'Your role', p: ['You listen without judgment, help clients understand their patterns, and support their goals. You do not diagnose or prescribe. Refer anything medical.'] },
+      { h: 'Confidentiality and its limits', p: ['Chats are private between you and the client. Tell clients up front that you may have to act if there is a serious risk to their life or someone else\'s, and follow the law where you practise.'] },
+      { h: 'Boundaries', ul: ['No lending or borrowing money, and no private relationships with clients.', 'Keep the conversation on the client, not on you.', 'Reply within a reasonable time and say when you are away.'] },
+      { h: 'If a client may be in danger', warn: 'If a client talks about ending their life or harming someone, ask directly, stay calm and stay in the conversation.',
+        ul: ['Share emergency numbers (999 or 112) and encourage them to go to the nearest hospital or to a trusted person now.', 'Do not promise secrecy.', 'Follow your organisation\'s escalation process.'] },
+      { h: 'Referring on', p: ['Refer to a doctor for withdrawal, to psychiatric care for severe depression or other conditions, and to legal or social services when needed. Say so honestly when something is beyond your scope.'] },
+      { h: 'First-chat checklist', ul: ['Welcome and explain how chat works', 'Ask what brought them here and what they hope for', 'Agree a first small step', 'Remind them of the tracker, library and handbooks'] }
+    ] }
+];
+
+function hbText(h) {
+  const out = [h.title, h.sub, ''];
+  h.chapters.forEach((c, i) => {
+    out.push(`${i + 1}. ${c.h}`);
+    if (c.warn) out.push(`IMPORTANT: ${c.warn}`);
+    (c.p || []).forEach(x => out.push(x));
+    (c.ul || []).forEach(x => out.push(`  - ${x}`));
+    out.push('');
+  });
+  out.push('Addiction Saver. Educational guidance only, not a replacement for medical care.');
+  return out.join('\n');
+}
+
+function initHandbooks() {
+  const grid = $('hbGrid'); if (!grid) return;
+  const words = h => hbText(h).split(/\s+/).length;
+  const mins = h => Math.max(1, Math.ceil(words(h) / 200));
+  const readList = () => ls.get('hbRead', []);
+  const render = () => {
+    const q = ($('hbSearch').value || '').trim().toLowerCase();
+    const list = HANDBOOKS.filter(h => !q || (h.title + ' ' + h.sub + ' ' + h.chapters.map(c => c.h).join(' ')).toLowerCase().includes(q));
+    const done = readList();
+    grid.innerHTML = list.map(h => `
+      <button class="hb-card" data-id="${h.id}" style="--g:${h.color}">
+        <span class="hb-ic">${h.icon}</span><h3>${esc(h.title)}</h3><p>${esc(h.sub)}</p>
+        <span class="hb-meta">${h.chapters.length} chapters · ${mins(h)} min read${done.includes(h.id) ? ' · ✓ Read' : ''}</span>
+      </button>`).join('');
+    $('hbEmpty').classList.toggle('hidden', list.length > 0);
+  };
+  bind('hbSearch', 'input', render);
+
+  const modal = $('hbModal');
+  const close = () => { if (modal.close) modal.close(); else modal.removeAttribute('open'); };
+  const open = id => {
+    const h = HANDBOOKS.find(x => x.id === id); if (!h) return;
+    const done = readList().includes(id);
+    $('hbBody').innerHTML = `
+      <div class="hb-reader">
+        <h2>${h.icon} ${esc(h.title)}</h2>
+        <p class="by">${esc(h.sub)} · ${mins(h)} min read</p>
+        <div class="hb-toc">${h.chapters.map((c, i) => `<button type="button" data-ch="${i}">${i + 1}. ${esc(c.h)}</button>`).join('')}</div>
+        ${h.chapters.map((c, i) => `
+          <section class="hb-ch" id="hbch${i}">
+            <h3>${i + 1}. ${esc(c.h)}</h3>
+            ${c.warn ? `<div class="hb-warn">⚠️ ${esc(c.warn)}</div>` : ''}
+            ${(c.p || []).map(x => `<p>${esc(x)}</p>`).join('')}
+            ${c.ul ? `<ul>${c.ul.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}
+          </section>`).join('')}
+        <p class="hint">Educational guidance only. It does not replace medical or emergency care.</p>
+      </div>
+      <div class="hb-actions">
+        <button class="btn btn-teal small" id="hbRead" type="button">${done ? '✓ Marked as read' : 'Mark as read'}</button>
+        <button class="btn btn-sun small" id="hbDl" type="button">⬇ Download</button>
+        <button class="btn btn-ghost-dark small" id="hbPrint" type="button">🖨 Print</button>
+      </div>`;
+    $('hbBody').querySelector('.hb-toc').addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b) return;
+      document.getElementById('hbch' + b.dataset.ch).scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    $('hbRead').addEventListener('click', () => {
+      let l = readList();
+      l = l.includes(id) ? l.filter(x => x !== id) : l.concat(id);
+      ls.set('hbRead', l);
+      $('hbRead').textContent = l.includes(id) ? '✓ Marked as read' : 'Mark as read';
+      render();
+    });
+    $('hbDl').addEventListener('click', () => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([hbText(h)], { type: 'text/plain' }));
+      a.download = h.id + '-handbook.txt'; a.click();
+      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    });
+    $('hbPrint').addEventListener('click', () => window.print());
+    if (modal.showModal) modal.showModal(); else modal.setAttribute('open', '');
+  };
+  grid.addEventListener('click', e => { const c = e.target.closest('.hb-card'); if (c) open(c.dataset.id); });
+  bind('hbClose', 'click', close);
+  modal.addEventListener('click', e => { if (e.target === modal) close(); });
+  render();
+}
+
+// ===============================================================
+// Meetings
+// ===============================================================
+// Meetings are NOT written here any more. The admin adds them in /admin.html and they are loaded
+// from the back end (GET /api/meetings). No meeting in the database = no meeting on the page.
+let MEETINGS = [];
+const CAT_COLORS = { checkin: '#f59e0b', substances: '#0ea5a4', digital: '#6d28d9', family: '#3b82f6', newcomers: '#ec4899', general: '#4338ca' };
+async function loadMeetings() {
+  try { MEETINGS = (await api('/meetings')).map(m => ({ ...m, color: CAT_COLORS[m.cat] || CAT_COLORS.general })); } catch { MEETINGS = []; }
+}
+const EAT = 3 * 3600e3;
+const DAYN = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+function nextSession(m, from = Date.now()) {
+  const [hh, mm] = m.time.split(':').map(Number);
+  const nowEat = new Date(from + EAT);
+  for (let i = 0; i < 8; i++) {
+    const d = new Date(Date.UTC(nowEat.getUTCFullYear(), nowEat.getUTCMonth(), nowEat.getUTCDate() + i));
+    if (!m.daily && d.getUTCDay() !== m.dow) continue;
+    const ts = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), hh, mm) - EAT;
+    if (ts + m.mins * 60000 > from) return ts;        // still running counts as "now"
+  }
+  return null;
+}
+
+function untilText(ts, m, now = Date.now()) {
+  if (now >= ts) return { text: 'Happening now', soon: true };
+  const mins = Math.round((ts - now) / 60000);
+  const d = Math.floor(mins / 1440), h = Math.floor((mins % 1440) / 60), mn = mins % 60;
+  const text = d ? `in ${d}d ${h}h` : h ? `in ${h}h ${mn}m` : `in ${mn} min`;
+  return { text, soon: mins <= 60 };
+}
+
+function icsFor(m) {
+  const ts = nextSession(m);
+  const f = t => new Date(t).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+  return ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Addiction Saver//Meetings//EN', 'BEGIN:VEVENT',
+    `UID:${m.id}@addiction-saver`, `DTSTAMP:${f(Date.now())}`, `DTSTART:${f(ts)}`, `DTEND:${f(ts + m.mins * 60000)}`,
+    `RRULE:FREQ=${m.daily ? 'DAILY' : 'WEEKLY'}`, `SUMMARY:${m.title}`, `DESCRIPTION:${m.desc}${m.link ? ' Join: ' + m.link : ''}`,
+    'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
+}
+
+let rsvps = [];
+async function loadRsvps() {
+  try { const r = await api('/meetings/rsvp'); rsvps = r.ids || []; } catch { rsvps = []; }
+}
+
+function renderMeetings() {
+  const list = $('meetList'); if (!list) return;
+  const cat = (document.querySelector('#meetChips .chip.active') || {}).dataset?.cat || 'all';
+  const now = Date.now();
+  const rows = MEETINGS.map(m => ({ m, ts: nextSession(m, now) })).filter(r => r.ts && (cat === 'all' || r.m.cat === cat)).sort((a, b) => a.ts - b.ts);
+  list.innerHTML = rows.map(({ m, ts }) => {
+    const u = untilText(ts, m, now), going = rsvps.includes(m.id);
+    const local = new Date(ts).toLocaleString([], { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+    const when = m.daily ? 'Every day' : 'Every ' + DAYN[m.dow];
+    return `
+      <article class="meet-card" style="--c:${m.color}">
+        <div class="meet-day"><b>${m.time}</b><span>EAT · ${m.daily ? 'daily' : DAYN[m.dow].slice(0, 3)}</span></div>
+        <div>
+          <h3>${esc(m.title)}</h3>
+          <p>${esc(m.desc)}</p>
+          <div class="meet-meta"><span>${when} · ${m.mins} min</span><span>${esc(m.host)}</span><span>Next: ${esc(local)}</span><span class="${u.soon ? 'soon' : ''}">${u.text}</span></div>
+        </div>
+        <div class="meet-act">
+          <button class="btn ${going ? 'going' : 'btn-sun'} small" data-rsvp="${m.id}">${going ? '✓ You are going' : 'RSVP'}</button>
+          <button class="btn btn-ghost-dark small" data-ics="${m.id}">📅 Add to calendar</button>
+          ${/^https?:\/\//.test(m.link || '') ? `<a class="btn btn-teal small" href="${esc(m.link)}" target="_blank" rel="noopener">Join meeting</a>` : ''}
+        </div>
+      </article>`;
+  }).join('');
+  $('meetEmpty').textContent = MEETINGS.length ? 'No meetings in this group.' : 'No meetings have been scheduled yet. Please check back soon.';
+  $('meetEmpty').classList.toggle('hidden', rows.length > 0);
+  $('meetChips').classList.toggle('hidden', !MEETINGS.length);
+
+  const first = MEETINGS.map(m => ({ m, ts: nextSession(m, now) })).filter(r => r.ts).sort((a, b) => a.ts - b.ts)[0];
+  $('nextUp').classList.toggle('hidden', !first);
+  if (first) {
+    const u = untilText(first.ts, first.m, now);
+    $('nextUp').innerHTML = `<div><small>Next meeting</small><h3>${esc(first.m.title)}</h3><p>${new Date(first.ts).toLocaleString([], { weekday: 'long', hour: '2-digit', minute: '2-digit' })} (your time)</p></div><div class="count-chip">${u.text}</div>`;
+  }
+  const mine = MEETINGS.filter(m => rsvps.includes(m.id));
+  $('meetMine').classList.toggle('hidden', !MEETINGS.length);
+  $('meetMine').textContent = mine.length ? 'You are registered for: ' + mine.map(m => m.title).join(', ') + '.' : 'You have not registered for any meeting yet.';
+}
+
+function initMeetings() {
+  if (!$('meetList')) return;
+  Promise.all([loadMeetings(), loadRsvps()]).then(renderMeetings);
+  bind('meetChips', 'click', e => {
+    const chip = e.target.closest('.chip'); if (!chip) return;
+    document.querySelectorAll('#meetChips .chip').forEach(c => c.classList.toggle('active', c === chip));
+    renderMeetings();
+  });
+  $('meetList').addEventListener('click', async e => {
+    const r = e.target.closest('[data-rsvp]'), c = e.target.closest('[data-ics]');
+    if (r) {
+      const id = r.dataset.rsvp, going = !rsvps.includes(id);
+      try {
+        const res = await api('/meetings/rsvp', 'POST', { meeting_id: id, going });
+        rsvps = res.ids || (going ? rsvps.concat(id) : rsvps.filter(x => x !== id));
+        toast(going ? 'You are registered. Add it to your calendar so you do not miss it.' : 'Registration cancelled.');
+        renderMeetings();
+      } catch (err) { toast(err.message); }
+    }
+    if (c) {
+      const m = MEETINGS.find(x => x.id === c.dataset.ics); if (!m) return;
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([icsFor(m)], { type: 'text/calendar' }));
+      a.download = m.id + '.ics'; a.click();
+      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    }
+  });
+  setInterval(() => { if (!document.hidden && document.body.dataset.page === 'meetings') renderMeetings(); }, 30000);
+}
+
+// ---------------------------------------------------------------
+// Start the parts this page needs
+// ---------------------------------------------------------------
+initChrome();
+initAddictions();
+initGuide();
+initBooks();
+initContact();
+initPayment();
+initChat();
+initCounselors();
+if ($('counselorList') || $('chatCounselor')) loadCounselors();
+initTracker();
+initHandbooks();
+initMeetings();
+
+// ---------------------------------------------------------------
+// Router: every menu item is its own page inside this one document
+// ---------------------------------------------------------------
+const VIEW_TITLES = {"home": "Recovery Support, Day Tracker and Counselors", "addictions": "Understanding Addictions", "counselling": "Counselling Guide", "books": "Book Library", "handbooks": "Handbooks", "meetings": "Support Meetings", "tracker": "My Day Tracker", "counselors": "Counselors", "chat": "Private Chat", "pricing": "Pricing", "about": "About Us", "contact": "Contact Us"};
+function route(first) {
+  const raw = location.hash.replace(/^#\/?/, '');
+  const [name0, query] = raw.split('?');
+  const name = VIEW_TITLES[name0] ? name0 : 'home';
+  qs = new URLSearchParams(query || '');
+  document.querySelectorAll('dialog[open]').forEach(d => { if (d.close) d.close(); else d.removeAttribute('open'); });
+  document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.dataset.view === name));
+  document.body.dataset.page = name;
+  document.querySelectorAll('#navLinks a[data-page]').forEach(a => a.classList.toggle('active', a.dataset.page === name));
+  document.querySelectorAll('.dd-btn').forEach(b => b.classList.toggle('active', !!b.parentElement.querySelector('a.active')));
+  const nav = $('navLinks'); if (nav) nav.classList.remove('open');
+  const mt = $('menuToggle'); if (mt) mt.setAttribute('aria-expanded', 'false');
+  document.title = VIEW_TITLES[name] + ' | Addiction Saver';
+  window.scrollTo({ top: 0, behavior: 'instant' });
+  if (!first && routeHooks[name]) routeHooks[name]();
+}
+routeHooks.counselors = () => loadCounselors();
+routeHooks.chat = async () => {
+  await loadPaid();
+  $('chatLocked').classList.toggle('hidden', paid);
+  $('chatArea').classList.toggle('hidden', !paid);
+  await loadCounselors();
+};
+routeHooks.pricing = async () => { await loadPaid(); renderPayBanner(paid); };
+routeHooks.meetings = async () => { await Promise.all([loadMeetings(), loadRsvps()]); renderMeetings(); };
+window.addEventListener('hashchange', () => route(false));
+route(true);
+
+// handy for testing in the browser console
+window.AS = { planMath, assignmentFor, assignmentForDate, computeProgress, ymd, addDays, diffDays, luhn, expOk, countWords, BOOKS };
+
+  </script>
+</body>
+</html>
